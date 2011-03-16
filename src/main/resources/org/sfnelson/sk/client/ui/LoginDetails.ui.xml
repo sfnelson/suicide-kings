@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.panel {
+			position: absolute;
+			top: 0;
+			right: 0;
+			font-size: small;
+		}
+		.name {}
+		.logout {
+			padding: 0 0.5em;
+		}
+	</ui:style>
+	<g:FlowPanel styleName="{style.panel}">
+		<g:InlineLabel styleName="{style.name}" ui:field="name" /> 
+		<g:Anchor styleName="{style.logout}" ui:field="logout">Logout</g:Anchor>
+	</g:FlowPanel>
+</ui:UiBinder>
