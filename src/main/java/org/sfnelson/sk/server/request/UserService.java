@@ -1,4 +1,4 @@
-package org.sfnelson.sk.server;
+package org.sfnelson.sk.server.request;
 
 import com.google.appengine.api.users.User;
 

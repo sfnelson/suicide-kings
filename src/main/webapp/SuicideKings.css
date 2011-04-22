@@ -4,5 +4,72 @@ html,body {
 }
 
 body {
-	height: 100%;
+	background-color: black;
+	font: normal 12px/1.5 Arial, Verdana, sans-serif;
+	color: #efc9a0;
+	height: 100%; 
+}
+
+header {
+	color: #f5ebd1;
+}
+
+.list {
+	color: #f5ebd1;
+}
+
+.list .item {
+	position: relative;
+	padding: 0.8em 0;
+}
+
+.list .odd {
+	background-color: #2b1507;
+	border-top: 1px solid #31190a;
+}
+
+.list .even {
+	background-color: #231207;
+	border-top: 1px solid #30190b;
+}
+
+ .list .item:hover, .list .selected {
+ 	background-color: #180c04;
+ 	border-top-color: #0f0702;
+ 	color: white;
+ }
+ 
+ .button {
+	border: none;
+	outline: none;
+	color: #ffae00;
+	text-transform: uppercase;
+	padding: 1ex 2em;
+	border: solid 1px #5f0101;
+	border-radius: 0.5ex;
+	background-color: #5a0b00;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.1, #562a1c), color-stop(0.4, #341009));
+	background-image: -moz-gradient(center top, #562a1c 10%, #341009 40%);
+}
+
+.button.selected, .button:hover {
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.1, #791900), color-stop(0.4, #450403));
+	background-image: -moz-gradient(center top, #791900 10%, #450403 40%);
+}
+
+.button.selected {
+	border: solid 1px #a82300;
+}
+
+.button:hover {
+	color: white;
+}
+
+input {
+	background-color: #f1ebd7;
+	color: #171717;
+	padding: 5px;
+	border: none;
+	outline: none;
+	border-radius: 3px;
 }

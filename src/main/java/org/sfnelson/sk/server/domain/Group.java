@@ -16,86 +16,86 @@ import javax.persistence.Version;
 
 @Entity(name="groups")
 @NamedQueries({
-    @NamedQuery(name="allGroups", query="select g from org.sfnelson.sk.server.domain.Group g"),
-    @NamedQuery(name="countGroups", query="select count(g) from org.sfnelson.sk.server.domain.Group g")
+	@NamedQuery(name="allGroups", query="select g from org.sfnelson.sk.server.domain.Group g"),
+	@NamedQuery(name="countGroups", query="select count(g) from org.sfnelson.sk.server.domain.Group g")
 })
 public class Group {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 
-    @Version
-    private Integer version;
+	@Version
+	private Integer version;
 
-    @Basic(fetch=FetchType.EAGER)
-    @Embedded
-    private Server server;
+	@Basic(fetch=FetchType.EAGER)
+	@Embedded
+	private Realm realm;
 
-    private String name;
+	private String name;
 
-    @Basic(fetch=FetchType.EAGER)
-    private Set<String> owners;
+	@Basic(fetch=FetchType.EAGER)
+	private final Set<String> owners;
 
-    private Set<Long> characterIds;
+	private final Set<Long> characterIds;
 
-    public Group() {
-        this.characterIds = new HashSet<Long>();
-        this.owners = new HashSet<String>();
-    }
+	public Group() {
+		this.characterIds = new HashSet<Long>();
+		this.owners = new HashSet<String>();
+	}
 
-    public Group(Server server, String name) {
-        this();
-        this.server = server;
-        this.name = name;
-    }
+	public Group(Realm realm, String name) {
+		this();
+		this.realm = realm;
+		this.name = name;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 
-    public Server getServer() {
-        return server;
-    }
+	public Realm getRealm() {
+		return realm;
+	}
 
-    public void setServer(Server server) {
-        this.server = server;
-    }
+	public void setRealm(Realm realm) {
+		this.realm = realm;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Set<Long> getCharacterIds() {
-        return characterIds;
-    }
+	public Set<Long> getCharacterIds() {
+		return characterIds;
+	}
 
-    public void addCharacter(Long characterId) {
-        this.characterIds.add(characterId);
-    }
+	public void addCharacter(Long characterId) {
+		this.characterIds.add(characterId);
+	}
 
-    public Set<String> getOwners() {
-        return owners;
-    }
+	public Set<String> getOwners() {
+		return owners;
+	}
 
-    public void addOwner(String owner) {
-        this.owners.add(owner);
-    }
+	public void addOwner(String owner) {
+		this.owners.add(owner);
+	}
 
-    public void removeOwner(String owner) {
-        this.owners.remove(owner);
-    }
+	public void removeOwner(String owner) {
+		this.owners.remove(owner);
+	}
 
-    @Override
-    public String toString() {
-        return id + ": " + name + " (" + server + ")";
-    }
+	@Override
+	public String toString() {
+		return id + ": " + name + " (" + realm + ")";
+	}
 }

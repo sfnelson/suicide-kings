@@ -10,7 +10,7 @@
 	<g:FlowPanel>
 		<g:FlowPanel>
 			<g:TextBox ui:field="name" />
-			<g:TextBox ui:field="realm" />
+			<g:TextBox ui:field="region" />
 			<g:TextBox ui:field="server" />
 			<g:Button ui:field="create">Create</g:Button>
 		</g:FlowPanel>

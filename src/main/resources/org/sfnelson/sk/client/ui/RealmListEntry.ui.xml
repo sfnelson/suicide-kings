@@ -1,0 +1,50 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style type="org.sfnelson.sk.client.ui.RealmListEntry.Style">
+		.realm {
+			text-align: center;
+			line-height: 1.2em;
+			height: 1.2em;
+		}
+		.realm > * {
+			position: absolute;
+			top: 0.8em;
+			bottom: 0.8em;
+			overflow: hidden;
+		}
+		.server {
+			font-weight: bold;
+			text-align: left;
+			left: 2em;
+			right: 60%;
+		}
+		.type {
+			left: 40%;
+			right: 40%;
+			color: #EBDBA2;
+		}
+		.population {
+			left: 60%;
+			right: 20%;
+			color: #EBDBA2;
+		}
+		.locale {
+			left: 80%;
+			right: 2em;
+		}
+		.rp, .low {
+			color: #3C3;
+		}
+		.medium, .pve, .rppvp {}
+		.pvp, .high, .full {
+			color: #C33;
+		}
+	</ui:style>
+	<g:FlowPanel styleName="item {style.realm}">
+		<g:Label ui:field="server" styleName="{style.server}"></g:Label>
+		<g:Label ui:field="type" styleName="{style.type}"></g:Label>
+		<g:Label ui:field="population" styleName="{style.population}"></g:Label>
+		<g:Label ui:field="locale" styleName="{style.locale}"></g:Label>
+	</g:FlowPanel>
+</ui:UiBinder> 

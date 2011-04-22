@@ -4,7 +4,7 @@ import org.sfnelson.sk.client.Factory;
 import org.sfnelson.sk.client.event.GroupSelectionEvent;
 import org.sfnelson.sk.client.event.GroupSelectionEvent.GroupSelectionHandler;
 import org.sfnelson.sk.client.place.ShowGroup;
-import org.sfnelson.sk.client.request.GaeUser;
+import org.sfnelson.sk.client.request.GaeUserProxy;
 import org.sfnelson.sk.client.request.GroupProxy;
 import org.sfnelson.sk.client.request.GroupRequest;
 import org.sfnelson.sk.client.request.RequestFactory;
@@ -23,7 +23,7 @@ implements GroupDetailsView.Presenter, GroupSelectionHandler {
     private final GroupDetailsView view;
     private final PlaceController pc;
 
-    private GaeUser user;
+    private GaeUserProxy user;
     private GroupProxy group;
 
     public ShowGroupDetails(Factory factory) {
@@ -31,9 +31,9 @@ implements GroupDetailsView.Presenter, GroupSelectionHandler {
         this.pc = factory.getPlaceController();
         this.view = factory.getGroupDetailsView();
 
-        rf.loginRequest().getCurrentUser().fire(new Receiver<GaeUser>() {
+        rf.loginRequest().getCurrentUser().fire(new Receiver<GaeUserProxy>() {
             @Override
-            public void onSuccess(GaeUser user) {
+            public void onSuccess(GaeUserProxy user) {
                 ShowGroupDetails.this.user = user;
 
                 refresh();

@@ -6,7 +6,7 @@ import org.sfnelson.sk.server.domain.Loot;
 
 import com.google.gwt.requestfactory.shared.Locator;
 
-public class LootService extends Locator<Loot, Long> {
+public class LootManager extends Locator<Loot, Long> {
 
     @Override
     public Loot create(Class<? extends Loot> clazz) {

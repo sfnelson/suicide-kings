@@ -10,7 +10,12 @@
 		}
 		.name {}
 		.logout {
+			text-decoration: none;
+			color: #00B6FF;
 			padding: 0 0.5em;
+		}
+		.logout:hover {
+			color: white;
 		}
 	</ui:style>
 	<g:FlowPanel styleName="{style.panel}">

@@ -9,25 +9,28 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class SuicideKingsApplication extends AbstractActivity {
 
-    private final Factory factory;
-    private final ApplicationView view;
+	private final Factory factory;
+	private final ApplicationView view;
 
-    public SuicideKingsApplication(Factory factory) {
-        this.factory = factory;
-        this.view = factory.getApplicationView();
-    }
+	public SuicideKingsApplication(Factory factory) {
+		this.factory = factory;
+		this.view = factory.getApplicationView();
+	}
 
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        new LoginManager(factory).start(view.getLoginContainer(), eventBus);
+	@Override
+	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		new LoginManager(factory).start(view.getLoginContainer(), eventBus);
 
-        SelectionActivityMapper selectionMapper = new SelectionActivityMapper(factory);
-        new ActivityManager(selectionMapper, eventBus).setDisplay(view.getSelectionContainer());
+		NavigationActivityMapper navMapper = new NavigationActivityMapper(factory);
+		new ActivityManager(navMapper, eventBus).setDisplay(view.getNavContainer());
 
-        InformationActivityMapper infoMapper = new InformationActivityMapper(factory);
-        new ActivityManager(infoMapper, eventBus).setDisplay(view.getInformationContainer());
+		SelectionActivityMapper selectionMapper = new SelectionActivityMapper(factory);
+		new ActivityManager(selectionMapper, eventBus).setDisplay(view.getSelectionContainer());
 
-        panel.setWidget(view);
-    }
+		InformationActivityMapper infoMapper = new InformationActivityMapper(factory);
+		new ActivityManager(infoMapper, eventBus).setDisplay(view.getInformationContainer());
+
+		panel.setWidget(view);
+	}
 
 }

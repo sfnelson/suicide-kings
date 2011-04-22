@@ -11,14 +11,24 @@
 			top: 0;
 			left: 0;
 			right: 0;
-			padding: 0.5ex;
-			height: 2ex;
-			border-bottom: solid 1px #bba;
+			height: 3ex;
+			font-family: "Lucida Sans Unicode", "Lucida Grande", "Arial", sans-serif;
+			font-size: 11pt;
+			background-color: #272e3f;
+			color: #8694a1;
 			overflow: hidden;
+		}
+		.nav {
+			position: abolute;
+			top: 4ex;
+			left: 0;
+			right: 0;
+			height: 2ex;
+			padding: 0.5ex 2em;
 		}
 		.selection, .information {
 			position: absolute;
-			top: 3ex;
+			top: 8ex;
 			bottom: 0;
 			width: 50%;
 		}
@@ -31,15 +41,15 @@
 		.menu {
 			position: absolute;
 			left: 0;
-			top: 0;
-			height: 100%;
+			top: 0.5ex;
+			bottom: 0.5ex;
 			text-align: left;
 		}
 		.login {
 			position: absolute;
 			right: 0;
-			top: 0;
-			height: 100%;
+			top: 0.5ex;
+			bottom: 0.5ex;
 			text-align: right;
 		}
 	</ui:style>
@@ -48,6 +58,7 @@
 			<g:SimplePanel ui:field="menu" styleName="{style.menu}"></g:SimplePanel>
 			<g:SimplePanel ui:field="login" styleName="{style.login}"></g:SimplePanel>
 		</g:FlowPanel>
+		<g:SimplePanel ui:field="navigation" styleName="{style.nav}"></g:SimplePanel>
 		<g:SimplePanel ui:field="selection" styleName="{style.selection}"></g:SimplePanel>
 		<g:SimplePanel ui:field="information" styleName="{style.information}"></g:SimplePanel>
 	</g:FlowPanel>

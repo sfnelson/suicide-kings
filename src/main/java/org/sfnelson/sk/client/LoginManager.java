@@ -1,7 +1,7 @@
 package org.sfnelson.sk.client;
 
-import org.sfnelson.sk.client.request.GaeRequest;
-import org.sfnelson.sk.client.request.GaeUser;
+import org.sfnelson.sk.client.request.GaeUserRequest;
+import org.sfnelson.sk.client.request.GaeUserProxy;
 import org.sfnelson.sk.client.request.RequestFactory;
 import org.sfnelson.sk.client.view.LoginDetailsView;
 
@@ -25,10 +25,10 @@ public class LoginManager extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
 
-        GaeRequest request = rf.loginRequest();
-        request.getCurrentUser().to(new Receiver<GaeUser>() {
+        GaeUserRequest request = rf.loginRequest();
+        request.getCurrentUser().to(new Receiver<GaeUserProxy>() {
             @Override
-            public void onSuccess(GaeUser user) {
+            public void onSuccess(GaeUserProxy user) {
                 view.setNickname(user.getNickname());
             }
         });

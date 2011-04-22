@@ -14,82 +14,82 @@ import javax.persistence.Version;
 
 @Entity(name="characters")
 @NamedQueries({
-    @NamedQuery(name="allCharacters", query="select c from org.sfnelson.sk.server.domain.Character c"),
-    @NamedQuery(name="countCharacters", query="select count(c) from org.sfnelson.sk.server.domain.Character c")
+	@NamedQuery(name="allCharacters", query="select c from org.sfnelson.sk.server.domain.Character c"),
+	@NamedQuery(name="countCharacters", query="select count(c) from org.sfnelson.sk.server.domain.Character c")
 })
 public class Character {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 
-    @Version
-    private Integer version;
+	@Version
+	private Integer version;
 
-    private String name;
+	private String name;
 
-    @Embedded
-    private Server server;
+	@Embedded
+	private Realm realm;
 
-    @Embedded
-    private ArmoryReference armory;
+	@Embedded
+	private ArmoryReference armory;
 
-    private Set<Long> groupIds;
+	private Set<Long> groupIds;
 
-    public Character() {
-        this.groupIds = new HashSet<Long>();
-    }
+	public Character() {
+		this.groupIds = new HashSet<Long>();
+	}
 
-    public Character(String name) {
-        this.name = name;
-    }
+	public Character(String name) {
+		this.name = name;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Server getServer() {
-        return server;
-    }
+	public Realm getRealm() {
+		return realm;
+	}
 
-    public void setServer(Server server) {
-        this.server = server;
-    }
+	public void setRealm(Realm realm) {
+		this.realm = realm;
+	}
 
-    public ArmoryReference getArmory() {
-        return armory;
-    }
+	public ArmoryReference getArmory() {
+		return armory;
+	}
 
-    public void setArmory(ArmoryReference armory) {
-        this.armory = armory;
-    }
+	public void setArmory(ArmoryReference armory) {
+		this.armory = armory;
+	}
 
-    public Long getSeed() {
-        return armory.getArmoryReference();
-    }
+	public Long getSeed() {
+		return armory.getArmoryReference();
+	}
 
-    public Set<Long> getGroupIds() {
-        return groupIds;
-    }
+	public Set<Long> getGroupIds() {
+		return groupIds;
+	}
 
-    public void addGroup(Long groupId) {
-        groupIds.add(groupId);
-    }
+	public void addGroup(Long groupId) {
+		groupIds.add(groupId);
+	}
 
-    @Override
-    public String toString() {
-        return name;
-    }
+	@Override
+	public String toString() {
+		return name;
+	}
 }

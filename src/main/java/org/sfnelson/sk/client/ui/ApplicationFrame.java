@@ -12,37 +12,43 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ApplicationFrame extends Composite implements ApplicationView {
 
-    private static LayoutUiBinder uiBinder = GWT.create(LayoutUiBinder.class);
+	private static LayoutUiBinder uiBinder = GWT.create(LayoutUiBinder.class);
 
-    interface LayoutUiBinder extends UiBinder<Widget, ApplicationFrame> {
-    }
+	interface LayoutUiBinder extends UiBinder<Widget, ApplicationFrame> {
+	}
 
-    public ApplicationFrame() {
-        initWidget(uiBinder.createAndBindUi(this));
-    }
+	public ApplicationFrame() {
+		initWidget(uiBinder.createAndBindUi(this));
+	}
 
-    @UiField SimplePanel login;
-    @UiField SimplePanel menu;
-    @UiField SimplePanel selection;
-    @UiField SimplePanel information;
+	@UiField SimplePanel login;
+	@UiField SimplePanel menu;
+	@UiField SimplePanel navigation;
+	@UiField SimplePanel selection;
+	@UiField SimplePanel information;
 
-    @Override
-    public AcceptsOneWidget getInformationContainer() {
-        return information;
-    }
+	@Override
+	public AcceptsOneWidget getInformationContainer() {
+		return information;
+	}
 
-    @Override
-    public AcceptsOneWidget getSelectionContainer() {
-        return selection;
-    }
+	@Override
+	public AcceptsOneWidget getSelectionContainer() {
+		return selection;
+	}
 
-    @Override
-    public AcceptsOneWidget getLoginContainer() {
-        return login;
-    }
+	@Override
+	public AcceptsOneWidget getLoginContainer() {
+		return login;
+	}
 
-    @Override
-    public AcceptsOneWidget getMenuContainer() {
-        return menu;
-    }
+	@Override
+	public AcceptsOneWidget getMenuContainer() {
+		return menu;
+	}
+
+	@Override
+	public AcceptsOneWidget getNavContainer() {
+		return navigation;
+	}
 }

@@ -24,85 +24,85 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 public class GroupPanel extends Composite implements GroupView {
 
-    private static GroupPanelUiBinder uiBinder = GWT.create(GroupPanelUiBinder.class);
+	private static GroupPanelUiBinder uiBinder = GWT.create(GroupPanelUiBinder.class);
 
-    interface GroupPanelUiBinder extends UiBinder<Widget, GroupPanel> {
-    }
+	interface GroupPanelUiBinder extends UiBinder<Widget, GroupPanel> {
+	}
 
-    public GroupPanel() {
-        initWidget(uiBinder.createAndBindUi(this));
-    }
+	public GroupPanel() {
+		initWidget(uiBinder.createAndBindUi(this));
+	}
 
-    @UiField CellTable<GroupProxy> groups;
+	@UiField CellTable<GroupProxy> groups;
 
-    @UiField TextBox name;
-    @UiField TextBox realm;
-    @UiField TextBox server;
+	@UiField TextBox name;
+	@UiField TextBox region;
+	@UiField TextBox server;
 
-    @UiField Button create;
+	@UiField Button create;
 
-    private Presenter presenter;
+	private Presenter presenter;
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
+	}
 
-    @Override
-    public void setGroups(List<GroupProxy> groups) {
-        this.groups.setRowData(groups);
-    }
+	@Override
+	public void setGroups(List<GroupProxy> groups) {
+		this.groups.setRowData(groups);
+	}
 
-    @UiHandler("create")
-    void onCreate(ClickEvent e) {
-        presenter.createGroup(name.getValue(), realm.getValue(), server.getValue());
-    }
+	@UiHandler("create")
+	void onCreate(ClickEvent e) {
+		presenter.createGroup(name.getValue(), region.getValue(), server.getValue());
+	}
 
-    @UiFactory
-    CellTable<GroupProxy> createGroupTable() {
-        CellTable<GroupProxy> table = new CellTable<GroupProxy>();
+	@UiFactory
+	CellTable<GroupProxy> createGroupTable() {
+		CellTable<GroupProxy> table = new CellTable<GroupProxy>();
 
-        table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
-            @Override
-            public String getValue(GroupProxy group) {
-                return group.getName();
-            }
-        });
+		table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
+			@Override
+			public String getValue(GroupProxy group) {
+				return group.getName();
+			}
+		});
 
-        table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
-            @Override
-            public String getValue(GroupProxy group) {
-                if (group == null || group.getServer() == null) {
-                    return "null";
-                }
-                else {
-                    return group.getServer().getRealm();
-                }
-            }
-        });
+		table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
+			@Override
+			public String getValue(GroupProxy group) {
+				if (group == null || group.getRealm() == null) {
+					return "null";
+				}
+				else {
+					return group.getRealm().getRegion();
+				}
+			}
+		});
 
-        table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
-            @Override
-            public String getValue(GroupProxy group) {
-                if (group == null || group.getServer() == null) {
-                    return "null";
-                }
-                else {
-                    return group.getServer().getServer();
-                }
-            }
-        });
+		table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
+			@Override
+			public String getValue(GroupProxy group) {
+				if (group == null || group.getRealm() == null) {
+					return "null";
+				}
+				else {
+					return group.getRealm().getServer();
+				}
+			}
+		});
 
-        table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-        final SingleSelectionModel<GroupProxy> selectionModel = new SingleSelectionModel<GroupProxy>();
-        table.setSelectionModel(selectionModel);
-        selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-            @Override
-            public void onSelectionChange(SelectionChangeEvent event) {
-                presenter.select(selectionModel.getSelectedObject());
-            }
-        });
+		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+		final SingleSelectionModel<GroupProxy> selectionModel = new SingleSelectionModel<GroupProxy>();
+		table.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				presenter.select(selectionModel.getSelectedObject());
+			}
+		});
 
-        return table;
-    }
+		return table;
+	}
 }

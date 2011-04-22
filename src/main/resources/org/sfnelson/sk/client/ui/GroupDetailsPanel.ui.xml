@@ -29,7 +29,7 @@
 		<g:HTMLPanel>
 			<hgroup>
 				<h1><g:InlineLabel ui:field="name" /></h1>
-				<h2><g:InlineLabel ui:field="realm" />-<g:InlineLabel ui:field="server" /></h2>
+				<h2><g:InlineLabel ui:field="region" />-<g:InlineLabel ui:field="server" /></h2>
 			</hgroup>
 		</g:HTMLPanel>
 		

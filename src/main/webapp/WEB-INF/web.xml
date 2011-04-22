@@ -15,7 +15,7 @@
 
 	<servlet>
 		<servlet-name>requestFactoryServlet</servlet-name>
-		<servlet-class>com.google.gwt.requestfactory.server.RequestFactoryServlet</servlet-class>
+		<servlet-class>org.sfnelson.sk.server.RequestFactoryServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>

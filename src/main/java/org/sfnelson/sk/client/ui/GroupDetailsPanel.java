@@ -17,76 +17,76 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GroupDetailsPanel extends Composite implements GroupDetailsView {
 
-    private static GroupDetailsPanelUiBinder uiBinder = GWT.create(GroupDetailsPanelUiBinder.class);
+	private static GroupDetailsPanelUiBinder uiBinder = GWT.create(GroupDetailsPanelUiBinder.class);
 
-    interface GroupDetailsPanelUiBinder extends UiBinder<Widget, GroupDetailsPanel> {
-    }
+	interface GroupDetailsPanelUiBinder extends UiBinder<Widget, GroupDetailsPanel> {
+	}
 
-    interface Style extends CssResource {
-        String owner();
-        String show();
-    }
+	interface Style extends CssResource {
+		String owner();
+		String show();
+	}
 
-    private Presenter presenter;
-    private GroupProxy group;
+	private Presenter presenter;
+	private GroupProxy group;
 
-    @UiField Panel panel;
-    @UiField Style style;
-    @UiField Label name;
-    @UiField Label realm;
-    @UiField Label server;
-    @UiField Button select;
-    @UiField Button delete;
+	@UiField Panel panel;
+	@UiField Style style;
+	@UiField Label name;
+	@UiField Label region;
+	@UiField Label server;
+	@UiField Button select;
+	@UiField Button delete;
 
-    public GroupDetailsPanel() {
-        initWidget(uiBinder.createAndBindUi(this));
-    }
+	public GroupDetailsPanel() {
+		initWidget(uiBinder.createAndBindUi(this));
+	}
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+	@Override
+	public void setPresenter(Presenter presenter) {
+		this.presenter = presenter;
 
-        panel.removeStyleName(style.owner());
-    }
+		panel.removeStyleName(style.owner());
+	}
 
-    @Override
-    public void setGroup(GroupProxy group, boolean isOwner) {
-        this.group = group;
+	@Override
+	public void setGroup(GroupProxy group, boolean isOwner) {
+		this.group = group;
 
-        if (group == null) {
-            panel.removeStyleName(style.show());
-            return;
-        }
-        else {
-            panel.addStyleName(style.show());
-        }
+		if (group == null) {
+			panel.removeStyleName(style.show());
+			return;
+		}
+		else {
+			panel.addStyleName(style.show());
+		}
 
-        name.setText(group.getName());
+		name.setText(group.getName());
 
-        if (group.getServer() == null) {
-            realm.setText("null");
-            server.setText("null");
-        }
-        else {
-            realm.setText(group.getServer().getRealm());
-            server.setText(group.getServer().getServer());
-        }
+		if (group.getRealm() == null) {
+			region.setText("null");
+			server.setText("null");
+		}
+		else {
+			region.setText(group.getRealm().getRegion());
+			server.setText(group.getRealm().getServer());
+		}
 
-        if (isOwner) {
-            panel.addStyleName(style.owner());
-        }
-        else {
-            panel.removeStyleName(style.owner());
-        }
-    }
+		if (isOwner) {
+			panel.addStyleName(style.owner());
+		}
+		else {
+			panel.removeStyleName(style.owner());
+		}
+	}
 
-    @UiHandler("select")
-    void select(ClickEvent event) {
-        presenter.select(group);
-    }
+	@UiHandler("select")
+	void select(ClickEvent event) {
+		presenter.select(group);
+	}
 
-    @UiHandler("delete")
-    void delete(ClickEvent event) {
-        presenter.delete(group);
-    }
+	@UiHandler("delete")
+	void delete(ClickEvent event) {
+		presenter.delete(group);
+	}
 }

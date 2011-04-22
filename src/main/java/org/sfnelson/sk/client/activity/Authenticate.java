@@ -1,7 +1,7 @@
 package org.sfnelson.sk.client.activity;
 
 import org.sfnelson.sk.client.Factory;
-import org.sfnelson.sk.client.request.GaeUser;
+import org.sfnelson.sk.client.request.GaeUserProxy;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -21,17 +21,17 @@ public class Authenticate extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         System.out.println("requesting login details");
         factory.getRequestFactory().loginRequest().getCurrentUser()
-        .fire(new Receiver<GaeUser>() {
+        .fire(new Receiver<GaeUserProxy>() {
 
             @Override
-            public void onSuccess(GaeUser response) {
+            public void onSuccess(GaeUserProxy response) {
                 Authenticate.this.onSuccess(response);
             }
 
         });
     }
 
-    private void onSuccess(GaeUser user) {
+    private void onSuccess(GaeUserProxy user) {
         System.out.println("received login details");
         if (user != null) {
             System.out.println("hi " + user.getNickname());
