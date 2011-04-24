@@ -1,6 +1,6 @@
 package org.sfnelson.sk.client.ui;
 
-import org.sfnelson.sk.client.request.CharacterProxy;
+import org.sfnelson.sk.client.Character;
 import org.sfnelson.sk.client.ui.ListEntry.EntryFactory;
 import org.sfnelson.sk.client.view.LadderView;
 
@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class LadderPanel extends ListPanel<CharacterProxy, CharacterWidget> implements LadderView {
+public class LadderPanel extends ListPanel<Character, CharacterWidget> implements LadderView {
 
 	private static LadderPanelUiBinder uiBinder = GWT.create(LadderPanelUiBinder.class);
 
@@ -36,7 +36,7 @@ public class LadderPanel extends ListPanel<CharacterProxy, CharacterWidget> impl
 	private LadderPresenter presenter;
 
 	public LadderPanel() {
-		super(new EntryFactory<CharacterProxy, CharacterWidget>() {
+		super(new EntryFactory<Character, CharacterWidget>() {
 			@Override
 			public CharacterWidget createEntry() {
 				return new CharacterWidget();

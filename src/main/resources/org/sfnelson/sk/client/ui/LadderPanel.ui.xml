@@ -5,21 +5,19 @@
 	<ui:style type="org.sfnelson.sk.client.ui.LadderPanel.Style">
 	.ladder {
 		position: absolute;
-		top: 1em;
-		bottom: 1em;
-		left: 1em;
-		right: 1em;
-		border-left: solid 1px #aaa;
-		border-right: solid 1px #aaa;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
 	}
 	.header, .footer {
-		border-top: solid 1px #aaa;
-		border-bottom: solid 1px #aaa;
-		height: 3ex;
-		padding: 0.5ex 0.5em;
+		padding: 0.5ex 1em;
+		height: 5ex;
 		position: absolute;
 		left: 0;
 		right: 0;
+		overflow: hidden;
+		background-color: #4d1a08;
 	}
 	.header {
 		top: 0;
@@ -27,12 +25,13 @@
 	.footer {
 		bottom: 0;
 	}
-	.contents {
+	.list {
 		position: absolute;
-		top: 4ex;
-		bottom: 4ex;
+		top: 6ex;
+		bottom: 6ex;
 		left: 0;
 		right: 0;
+		overflow: auto;
 	}
 	.mode {
 		float: right;
@@ -48,6 +47,14 @@
 	.viewMode .view {
 		display: block;
 	}
+	
+	.viewMode .list button {
+		display: none;
+	}
+	
+	.name {
+		width: 12em;
+	}
 	</ui:style>
 	<g:FlowPanel styleName="{style.ladder}">
 		<g:FlowPanel styleName="container">
@@ -56,12 +63,12 @@
 					<g:Button ui:field="edit" styleName="button {style.mode}">Edit</g:Button>
 				</g:FlowPanel>
 				<g:FlowPanel styleName="{style.edit}">
-					<g:TextBox ui:field="name" />
+					<g:TextBox ui:field="name" styleName="{style.name}"/>
 					<g:Button ui:field="add" styleName="button">Add Character</g:Button>
 					<g:Button ui:field="done" styleName="button {style.mode}">Done</g:Button>
 				</g:FlowPanel>
 			</g:FlowPanel>
-			<g:FlowPanel ui:field="list" styleName="list" />
+			<g:FlowPanel ui:field="list" styleName="list {style.list}" />
 			<g:FlowPanel styleName="{style.footer}">
 			</g:FlowPanel>
 		</g:FlowPanel>

@@ -1,14 +1,46 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
+	<ui:style type="org.sfnelson.sk.client.ui.CharacterWidget.Style">
+		.entry {
+			height: 63px;
+			padding: 2px 2px !important;
+		}
+		.avatar {
+			position: absolute;
+			left: 2px;
+			top: 1px;
+			width: 63px;
+			height: 63px;
+			border: solid 1px black;
+		}
 		.name {
-			display: inline;
+			position: absolute;
+			left: 68px;
+			top: 0;
+			bottom: 0;
+			padding: 1ex 1em;
+			font-weight: bold;
+			font-size: 120%;
+		}
+		.add, .remove {
+			position: absolute;
+			top: 2ex;
+			right: 1em;
+			margin: auto 0;
+		}
+		
+		.remove, .present .add {
+			display: none;
+		}
+		.present .remove, .add {
+			display: block;
 		}
 	</ui:style>
-	<g:FlowPanel styleName="item">
+	<g:FlowPanel styleName="item {style.entry}">
+		<g:Image ui:field="avatar" styleName="{style.avatar}"></g:Image>
 		<g:Label ui:field="name" styleName="{style.name}"></g:Label>
-		<g:Button ui:field="add" styleName="button add">Add</g:Button>
-		<g:Button ui:field="remove" styleName="button remove">Remove</g:Button>
+		<g:Button ui:field="add" styleName="button add {style.add}">Add</g:Button>
+		<g:Button ui:field="remove" styleName="button remove {style.remove}">Remove</g:Button>
 	</g:FlowPanel>
 </ui:UiBinder> 

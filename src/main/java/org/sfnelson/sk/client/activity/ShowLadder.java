@@ -1,10 +1,13 @@
 package org.sfnelson.sk.client.activity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.sfnelson.sk.client.Character;
 import org.sfnelson.sk.client.EventManager;
 import org.sfnelson.sk.client.Factory;
 import org.sfnelson.sk.client.event.SuicideKingsEvent;
@@ -75,16 +78,16 @@ public class ShowLadder extends AbstractActivity implements LadderPresenter, Eve
 	}
 
 	@Override
-	public void joinParty(CharacterProxy character) {
+	public void joinParty(Character character) {
 		EventRequest rq = factory.getRequestFactory().eventRequest();
-		rq.joinParty(manager.getGroup(), character);
+		rq.joinParty(manager.getGroup(), character.getProxy());
 		rq.fire();
 	}
 
 	@Override
-	public void leaveParty(CharacterProxy character) {
+	public void leaveParty(Character character) {
 		EventRequest rq = factory.getRequestFactory().eventRequest();
-		rq.leaveParty(manager.getGroup(), character);
+		rq.leaveParty(manager.getGroup(), character.getProxy());
 		rq.fire();
 	}
 
@@ -99,22 +102,24 @@ public class ShowLadder extends AbstractActivity implements LadderPresenter, Eve
 			view.showData(ladder);
 		}
 		else {
-			view.showData(new ArrayList<CharacterProxy>(active));
+			view.showData(new ArrayList<Character>(active));
 		}
 	}
 
-	private final List<CharacterProxy> ladder = new ArrayList<CharacterProxy>();
-	private final Set<CharacterProxy> active = new HashSet<CharacterProxy>();
+	private final Map<CharacterProxy, Character> characters = new HashMap<CharacterProxy, Character>();
+	private final List<Character> ladder = new ArrayList<Character>();
+	private final Set<Character> active = new HashSet<Character>();
 
 	@Override
 	public void onCharacterAdded(SuicideKingsEvent event) {
-		CharacterProxy character = event.getCharacter();
+		Character character = new Character(event.getCharacter(), group, this);
+		characters.put(event.getCharacter(), character);
 
 		if (ladder.contains(character)) {
 			throw new IllegalArgumentException("Cannot add character to the ladder. Character is already present.");
 		}
 
-		int position = Random.getRandom(character.getSeed(), 0, ladder.size());
+		int position = Random.getRandom(character.getProxy().getSeed(), 0, ladder.size());
 		ladder.add(position, character);
 
 		update(true);
@@ -122,20 +127,22 @@ public class ShowLadder extends AbstractActivity implements LadderPresenter, Eve
 
 	@Override
 	public void onCharacterJoined(SuicideKingsEvent event) {
-		CharacterProxy character = event.getCharacter();
+		Character character = characters.get(event.getCharacter());
+		character.setPresent(true);
 
 		active.add(character);
 
-		update(false);
+		update(true);
 	}
 
 	@Override
 	public void onCharacterLeft(SuicideKingsEvent event) {
-		CharacterProxy character = event.getCharacter();
+		Character character = characters.get(event.getCharacter());
+		character.setPresent(false);
 
 		active.remove(character);
 
-		update(false);
+		update(true);
 	}
 
 	@Override
@@ -163,8 +170,8 @@ public class ShowLadder extends AbstractActivity implements LadderPresenter, Eve
 	}
 
 	private void swap(int a, int b) {
-		CharacterProxy ca = ladder.get(a);
-		CharacterProxy cb = ladder.get(b);
+		Character ca = ladder.get(a);
+		Character cb = ladder.get(b);
 
 		ladder.set(a, cb);
 		ladder.set(b, ca);

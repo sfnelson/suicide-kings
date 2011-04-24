@@ -123,7 +123,9 @@ public class EventManager extends AbstractActivity {
 	}
 
 	private void getCharacter(Long id) {
-		rf.characterRequest().findCharacter(id).fire(new Receiver<CharacterProxy>() {
+		rf.characterRequest().findCharacter(id)
+		.with("armory")
+		.fire(new Receiver<CharacterProxy>() {
 			@Override
 			public void onSuccess(CharacterProxy character) {
 				characters.put(character.getId(), character);

@@ -57,6 +57,12 @@ public class CharacterManager extends Locator<Character, Long> implements Charac
 		em.persist(created);
 		tx.commit();
 
+		Event joined = new Event(EventType.JOINED, group, character, "");
+
+		tx.begin();
+		em.persist(joined);
+		tx.commit();
+
 		System.out.println("registered character: " + character);
 		return character;
 	}
