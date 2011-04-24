@@ -2,7 +2,78 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
-	<ui:style>
+	<ui:style type="org.sfnelson.sk.client.ui.EventsPanel.Style">
+		.assignLoot {
+			padding: 0.5ex 1em;
+			height: 5ex;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			overflow: hidden;
+			background-color: #4d1a08;
+		}
+		.assignLoot input {
+			margin: 4px	2px;
+		}
+		.name, .lootId, .submit {
+			float: left;
+		}
+		
+		.filter {
+			padding: 0.5ex 1em;
+			height: 2ex;
+			position: absolute;
+			top: 6ex;
+			left: 0;
+			right: 0;
+			overflow: hidden;
+		}
+		
+		.list {
+			position: absolute;
+			top: 9ex;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			overflow: auto;
+		}
+		
+		.filter .added, .filter .joined,
+		.filter .left, .filter .loot {
+			display: inline-block;
+			margin-right: 0.5em;
+		}
+		
+		.added .filter .added, .joined .filter .joined,
+		.left .filter .left, .loot .filter .loot {
+			color: green;	
+		}
+		
+		.list .added, .list .joined,
+		.list .left, .list .loot {
+			display: none;
+		}
+		
+		.added .list .added, .joined .list .joined,
+		.left .list .left, .loot .list .loot {
+			display: block;
+			padding: 0.5ex 2em;
+		} 
 	</ui:style>
-	<c:CellTable ui:field="events" />
+	<g:FlowPanel>
+		<g:FlowPanel styleName="{style.assignLoot}">
+			<g:SuggestBox ui:field="name" styleName="{style.name}"></g:SuggestBox>
+			<g:TextBox ui:field="lootId" styleName="{style.lootId}"></g:TextBox>
+			<g:Button ui:field="submit" styleName="button {style.submit}">Assign</g:Button>
+		</g:FlowPanel>
+		<g:FlowPanel styleName="{style.filter}">
+			<g:Anchor ui:field="added" styleName="{style.added}">Added</g:Anchor>
+			<g:Anchor ui:field="joined" styleName="{style.joined}">Joined</g:Anchor>
+			<g:Anchor ui:field="left" styleName="{style.left}">Left</g:Anchor>
+			<g:Anchor ui:field="loot" styleName="{style.loot}">Loot</g:Anchor>
+		</g:FlowPanel>
+		<g:FlowPanel ui:field="list" styleName="list {style.list}">
+		</g:FlowPanel>
+	</g:FlowPanel>
 </ui:UiBinder> 

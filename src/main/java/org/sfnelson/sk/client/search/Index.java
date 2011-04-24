@@ -1,6 +1,7 @@
 package org.sfnelson.sk.client.search;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,24 +15,34 @@ public class Index<T> {
 		String[] visit(T input);
 	}
 
+	private final Serializer<T> serializer;
 	private final Comparator<T> comparator;
-	private final List<T> all;
-	private final List<T> emptyList;
-	private final Set<String> emptySet;
-	private final Map<String, Set<String>> tupleIndex;
-	private final Map<String, List<T>> tokenIndex;
+	private final List<T> all = new ArrayList<T>();
+	private final List<T> emptyList = new ArrayList<T>();
+	private final Set<String> emptySet = new HashSet<String>(0);
+	private final Map<String, Set<String>> tupleIndex = new HashMap<String, Set<String>>();
+	private final Map<String, List<T>> tokenIndex = new HashMap<String, List<T>>();
+
+	public Index(Serializer<T> serializer, Comparator<T> comparator) {
+		this.serializer = serializer;
+		this.comparator = comparator;
+	}
 
 	public Index(List<T> data, Serializer<T> serializer, Comparator<T> comparator) {
-		this.comparator = comparator;
-		all = data;
-		emptyList = new ArrayList<T>();
-		emptySet = new HashSet<String>();
-		tupleIndex = new HashMap<String, Set<String>>();
-		tokenIndex = new HashMap<String, List<T>>();
+		this(serializer, comparator);
+		all.addAll(data);
 		for (T target: data) {
 			for (String token: serializer.visit(target)) {
 				addString(token, target);
 			}
+		}
+	}
+
+	public void add(T target) {
+		all.add(target);
+		Collections.sort(all, comparator);
+		for (String token: serializer.visit(target)) {
+			addString(token, target);
 		}
 	}
 
@@ -212,5 +223,6 @@ public class Index<T> {
 			tokenIndex.put(token, values);
 		}
 		values.add(value);
+		Collections.sort(values, comparator);
 	}
 }

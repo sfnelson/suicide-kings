@@ -10,7 +10,7 @@
 		left: 0;
 		right: 0;
 	}
-	.header, .footer {
+	.header {
 		padding: 0.5ex 1em;
 		height: 5ex;
 		position: absolute;
@@ -28,7 +28,7 @@
 	.list {
 		position: absolute;
 		top: 6ex;
-		bottom: 6ex;
+		bottom: 0;
 		left: 0;
 		right: 0;
 		overflow: auto;
@@ -69,8 +69,6 @@
 				</g:FlowPanel>
 			</g:FlowPanel>
 			<g:FlowPanel ui:field="list" styleName="list {style.list}" />
-			<g:FlowPanel styleName="{style.footer}">
-			</g:FlowPanel>
 		</g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

@@ -18,8 +18,21 @@ header {
 	display: none;
 }
 
-.list {
+.list, .suggestPopupContent {
 	color: #f5ebd1;
+}
+
+.suggestPopupContent {
+	width: 10em;
+}
+
+.suggestPopupContent table {
+	width: 100%;
+	border-spacing: 0;
+}
+
+.suggestPopupContent .item {
+	padding: 2px 0.5em;
 }
 
 .list .item {
@@ -27,17 +40,18 @@ header {
 	padding: 0.8em 0;
 }
 
-.list .odd {
+.list .odd, .suggestPopupContent tr:nth-child(odd) {
 	background-color: #2b1507;
 	border-top: 1px solid #31190a;
 }
 
-.list .even {
+.list .even, .suggestPopupContent tr:nth-child(even) {
 	background-color: #231207;
 	border-top: 1px solid #30190b;
 }
 
- .list .item:hover, .list .selected {
+ .list .item:hover, .list .selected,
+ .suggestPopupContent .item:hover, .suggestPopupContent .item-selected {
  	background-color: #180c04;
  	border-top-color: #0f0702;
  	color: white;
