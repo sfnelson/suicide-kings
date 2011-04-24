@@ -16,8 +16,8 @@ import org.sfnelson.sk.shared.EventType;
 public class Event {
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private Long id;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	private Long id;
 
 	@Version
 	private Integer version;
@@ -47,59 +47,68 @@ public class Event {
 		this.date = new Date();
 	}
 
+	public Event(EventType type, Group group, Character character, String info) {
+		this.type = type;
+		this.groupId = group.getId();
+		this.characterId = character.getId();
+		this.info = info;
+
+		this.date = new Date();
+	}
+
 	public Long getId() {
-	    return id;
+		return id;
 	}
 
 	public Integer getVersion() {
-	    return version;
+		return version;
 	}
 
 	public Date getDate() {
-	    return date;
+		return date;
 	}
 
 	public void setDate(Date date) {
-	    this.date = date;
+		this.date = date;
 	}
 
 	public EventType getType() {
-	    return type;
+		return type;
 	}
 
 	public void setType(EventType type) {
-	    this.type = type;
+		this.type = type;
 	}
 
 	public Long getGroupId() {
-	    return groupId;
+		return groupId;
 	}
 
 	public void setGroupId(Long groupId) {
-	    this.groupId = groupId;
+		this.groupId = groupId;
 	}
 
 	public Long getCharacterId() {
-	    return characterId;
+		return characterId;
 	}
 
 	public void setCharacterId(Long characterId) {
-	    this.characterId = characterId;
+		this.characterId = characterId;
 	}
 
 	public Long getLootId() {
-	    return lootId;
+		return lootId;
 	}
 
 	public void setLootId(Long lootId) {
-	    this.lootId = lootId;
+		this.lootId = lootId;
 	}
 
 	public String getInfo() {
-	    return info;
+		return info;
 	}
 
 	public void setInfo(String info) {
-	    this.info = info;
+		this.info = info;
 	}
 }

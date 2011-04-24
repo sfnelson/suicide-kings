@@ -1,60 +1,60 @@
 package org.sfnelson.sk.client.activity;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sfnelson.sk.client.Factory;
-import org.sfnelson.sk.client.request.EventProxy;
-import org.sfnelson.sk.client.request.EventRequest;
-import org.sfnelson.sk.client.request.GroupProxy;
+import org.sfnelson.sk.client.event.SuicideKingsEvent;
+import org.sfnelson.sk.client.place.Group;
 import org.sfnelson.sk.client.view.EventsView;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public class ShowEvents extends AbstractActivity implements EventsView.Presenter {
+public class ShowEvents extends AbstractActivity implements EventsView.Presenter, SuicideKingsEvent.EventHandler {
 
-    private final Factory factory;
-    private final EventsView view;
-    private final EntityProxyId<GroupProxy> groupId;
+	private final EventsView view;
+	private final Group group;
 
-    private Date lastUpdate;
+	private final List<SuicideKingsEvent> events = new ArrayList<SuicideKingsEvent>();
 
-    public ShowEvents(Factory factory, EntityProxyId<GroupProxy> groupId) {
-        this.factory = factory;
-        this.view = factory.getEventsView();
-        this.groupId = groupId;
+	public ShowEvents(Factory factory, Group group) {
+		this.view = factory.getEventsView();
+		this.group = group;
+	}
 
-        lastUpdate = new Date(0);
-    }
+	@Override
+	public void start(AcceptsOneWidget panel, EventBus eventBus) {
+		view.setPresenter(this);
+		panel.setWidget(view);
 
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
+		SuicideKingsEvent.register(eventBus, this);
+	}
 
-        refresh();
+	private void addEvent(SuicideKingsEvent event) {
+		events.add(event);
 
-        panel.setWidget(view);
+		view.setEvents(events);
+	}
 
-        new Timer() {
-            @Override
-            public void run() {
-                refresh();
-            }
-        }.scheduleRepeating(5000);
-    }
+	@Override
+	public void onCharacterAdded(SuicideKingsEvent event) {
+		addEvent(event);
+	}
 
-    private void refresh() {
-        EventRequest rq = factory.getRequestFactory().eventRequest();
-        rq.getEvents(lastUpdate).fire(new Receiver<List<EventProxy>>() {
-            @Override
-            public void onSuccess(List<EventProxy> response) {
-                view.setEvents(response);
-            }
-        });
-    }
+	@Override
+	public void onCharacterJoined(SuicideKingsEvent event) {
+		addEvent(event);
+	}
+
+	@Override
+	public void onCharacterLeft(SuicideKingsEvent event) {
+		addEvent(event);
+	}
+
+	@Override
+	public void onReceivedLoot(SuicideKingsEvent event) {
+		addEvent(event);
+	}
 }

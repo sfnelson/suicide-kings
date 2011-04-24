@@ -13,12 +13,13 @@ import com.google.gwt.requestfactory.shared.ProxyFor;
 @ProxyFor(value=Event.class, locator=EventManager.class)
 public interface EventProxy extends EntityProxy {
 
-    Date getDate();
-    EventType getType();
-    Long getGroupId();
-    Long getCharacterId();
-    Long getLootId();
-    String getInfo();
+	Date getDate();
+	EventType getType();
+	Long getGroupId();
+	Long getCharacterId();
+	Long getLootId();
+	String getInfo();
 
-    EntityProxyId<EventProxy> stableId();
+	@Override
+	EntityProxyId<EventProxy> stableId();
 }

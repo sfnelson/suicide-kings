@@ -3,17 +3,23 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style type="org.sfnelson.sk.client.ui.BreadcrumbPanel.Style">
 		.crumb {
+			text-transform:capitalize;
 			text-decoration: none;
 			border-bottom: 1px dotted #6c4d05;
 			color: #ffb100;
+			display: inline-block;
 		}
 		.selected {
 			border-bottom: none;
 			color: white;
 		}
+		.spacer {
+			color: #ffb100;
+			font-weight: bold;
+			display: inline-block;
+			padding: 0 1em;
+		}
 	</ui:style>
-	<g:FocusPanel ui:field="wrapper" tabIndex="-1">
-		<g:FlowPanel ui:field="container">
-		</g:FlowPanel>
-	</g:FocusPanel>
+	<g:FlowPanel ui:field="container">
+	</g:FlowPanel>
 </ui:UiBinder> 

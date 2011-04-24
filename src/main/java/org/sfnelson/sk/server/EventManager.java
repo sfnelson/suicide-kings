@@ -3,13 +3,13 @@ package org.sfnelson.sk.server;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.sfnelson.sk.server.domain.Character;
 import org.sfnelson.sk.server.domain.Event;
 import org.sfnelson.sk.server.domain.Group;
 import org.sfnelson.sk.server.request.EventService;
+import org.sfnelson.sk.shared.EventType;
 
 import com.google.gwt.requestfactory.shared.Locator;
 
@@ -17,36 +17,31 @@ public class EventManager extends Locator<Event, Long> implements EventService {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Event> getEvents(Date after) {
+	public List<Event> getEvents(Group group, Date after) {
 		if (after == null) {
 			after = new Date(0);
 		}
 
-		EntityManager em = EMF.get().createEntityManager();
-		try {
-			Query q = em.createQuery("select from " + Event.class.getName() + " where date > :date");
-			q.setParameter("date", after);
-			return q.getResultList();
-		}
-		catch (RuntimeException ex) {
-			ex.printStackTrace();
-			throw ex;
-		}
-		finally {
-			em.close();
-		}
+		Query q = EMF.get().createQuery("select from " + Event.class.getName() + " where groupId = :group and date > :date");
+		q.setParameter("group", group.getId());
+		q.setParameter("date", after);
+		List<Event> result = q.getResultList();
+		result.size(); // load lazy collection
+		return result;
 	}
 
 	@Override
 	public void joinParty(Group group, Character character) {
-		// TODO Auto-generated method stub
+		Event event = new Event(EventType.JOINED, group, character, "");
 
+		EMF.get().persist(event);
 	}
 
 	@Override
 	public void leaveParty(Group group, Character character) {
-		// TODO Auto-generated method stub
+		Event event = new Event(EventType.LEFT, group, character, "");
 
+		EMF.get().persist(event);
 	}
 
 	@Override
@@ -60,13 +55,7 @@ public class EventManager extends Locator<Event, Long> implements EventService {
 			return null;
 		}
 
-		EntityManager em = EMF.get().createEntityManager();
-		try {
-			return em.find(clazz, id);
-		}
-		finally {
-			em.close();
-		}
+		return EMF.get().find(clazz, id);
 	}
 
 	@Override

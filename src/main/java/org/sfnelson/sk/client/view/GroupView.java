@@ -8,13 +8,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface GroupView extends IsWidget {
 
-    void setPresenter(Presenter presenter);
-    void setGroups(List<GroupProxy> response);
+	void setPresenter(Presenter presenter);
+	void setData(List<GroupProxy> data);
+	void showData(List<GroupProxy> data);
 
-    interface Presenter {
+	interface Presenter {
 
-        void createGroup(String name, String realm, String server);
-        void select(GroupProxy group);
+		void createGroup(String name);
+		void filter(String filter);
+		void select(GroupProxy group);
 
-    }
+	}
 }

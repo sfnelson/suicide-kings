@@ -10,8 +10,12 @@ import com.google.gwt.requestfactory.shared.ProxyFor;
 @ProxyFor(value=Loot.class, locator=LootManager.class)
 public interface LootProxy extends EntityProxy {
 
-    Long getReference();
-    String getName();
-    EntityProxyId<LootProxy> stableId();
+	Long getId();
+
+	Long getReference();
+	String getName();
+
+	@Override
+	EntityProxyId<LootProxy> stableId();
 
 }

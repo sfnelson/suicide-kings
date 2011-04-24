@@ -2,7 +2,7 @@ package org.sfnelson.sk.client;
 
 import org.sfnelson.sk.client.event.NotAuthenticatedEvent;
 import org.sfnelson.sk.client.event.NotAuthenticatedEvent.AuthenticationHandler;
-import org.sfnelson.sk.client.place.SelectRealm;
+import org.sfnelson.sk.client.place.Region;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -26,9 +26,9 @@ public class SuicideKings implements EntryPoint, AuthenticationHandler {
 		EventBus eventBus = factory.getEventBus();
 		PlaceController placeController = factory.getPlaceController();
 
-		HistoryMapper historyMapper = GWT.create(HistoryMapper.class);
+		HistoryMapper historyMapper = new HistoryMapper();
 		PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-		historyHandler.register(placeController, eventBus, new SelectRealm("us"));
+		historyHandler.register(placeController, eventBus, Region.US);
 
 		NotAuthenticatedEvent.register(eventBus, this);
 

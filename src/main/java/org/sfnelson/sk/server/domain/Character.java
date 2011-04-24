@@ -1,8 +1,5 @@
 package org.sfnelson.sk.server.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,8 +11,8 @@ import javax.persistence.Version;
 
 @Entity(name="characters")
 @NamedQueries({
-	@NamedQuery(name="allCharacters", query="select c from org.sfnelson.sk.server.domain.Character c"),
-	@NamedQuery(name="countCharacters", query="select count(c) from org.sfnelson.sk.server.domain.Character c")
+	@NamedQuery(name="allCharactersInRealm", query="select c from org.sfnelson.sk.server.domain.Character c where c.realmId = :realm"),
+	@NamedQuery(name="countCharactersInRealm", query="select count(c) from org.sfnelson.sk.server.domain.Character c where c.realmId = :realm")
 })
 public class Character {
 
@@ -28,21 +25,12 @@ public class Character {
 
 	private String name;
 
-	@Embedded
-	private Realm realm;
+	private Long realmId;
 
 	@Embedded
 	private ArmoryReference armory;
 
-	private Set<Long> groupIds;
-
-	public Character() {
-		this.groupIds = new HashSet<Long>();
-	}
-
-	public Character(String name) {
-		this.name = name;
-	}
+	public Character() {}
 
 	public Long getId() {
 		return id;
@@ -60,12 +48,12 @@ public class Character {
 		this.name = name;
 	}
 
-	public Realm getRealm() {
-		return realm;
+	public Long getRealm() {
+		return realmId;
 	}
 
-	public void setRealm(Realm realm) {
-		this.realm = realm;
+	public void setRealm(Long realmId) {
+		this.realmId = realmId;
 	}
 
 	public ArmoryReference getArmory() {
@@ -78,14 +66,6 @@ public class Character {
 
 	public Long getSeed() {
 		return armory.getArmoryReference();
-	}
-
-	public Set<Long> getGroupIds() {
-		return groupIds;
-	}
-
-	public void addGroup(Long groupId) {
-		groupIds.add(groupId);
 	}
 
 	@Override

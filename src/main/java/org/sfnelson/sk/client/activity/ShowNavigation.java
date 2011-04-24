@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sfnelson.sk.client.Factory;
+import org.sfnelson.sk.client.place.Group;
+import org.sfnelson.sk.client.place.Realm;
+import org.sfnelson.sk.client.place.Region;
 import org.sfnelson.sk.client.view.NavigationView;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -24,10 +27,36 @@ public class ShowNavigation extends AbstractActivity implements NavigationView.P
 		pc = factory.getPlaceController();
 		view = factory.getNavigationView();
 
-		if (place instanceof org.sfnelson.sk.client.place.SelectGroup) {
+		if (place instanceof Region) {
+			addRegion((Region) place);
+			texts.add("Select Realm");
+			targets.add(place);
+		}
+		else if (place instanceof Realm) {
+			addRealm((Realm) place);
 			texts.add("Select Group");
 			targets.add(place);
 		}
+		else if (place instanceof Group) {
+			addGroup((Group) place);
+		}
+	}
+
+	private void addRegion(Region region) {
+		texts.add(region.getRegion().toUpperCase());
+		targets.add(region);
+	}
+
+	private void addRealm(Realm realm) {
+		addRegion(realm.getRegion());
+		texts.add(realm.getServer());
+		targets.add(realm);
+	}
+
+	private void addGroup(Group group) {
+		addRealm(group.getRealm());
+		texts.add(group.getName());
+		targets.add(group);
 	}
 
 	@Override

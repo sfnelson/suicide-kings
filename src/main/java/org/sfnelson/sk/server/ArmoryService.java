@@ -63,7 +63,7 @@ public class ArmoryService {
 
 		Character c = new Character();
 		c.setName(name);
-		c.setRealm(realm);
+		c.setRealm(realm.getId());
 		c.setArmory(armory);
 		return c;
 	}

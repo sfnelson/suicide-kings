@@ -11,6 +11,8 @@ import com.google.gwt.requestfactory.shared.Service;
 
 @Service(value=CharacterService.class, locator=ServiceLocator.class)
 public interface CharacterRequest extends RequestContext {
-	Request<CharacterProxy> registerCharacter(GroupProxy group, String name);
-	Request<List<CharacterProxy>> findCharactersForGroup(GroupProxy group);
+	Request<CharacterProxy> registerCharacter(String region, String server, String group, String name);
+	Request<List<CharacterProxy>> findCharactersForGroup(String region, String server, String group);
+	Request<List<CharacterProxy>> findCharacters(String region, String server);
+	Request<CharacterProxy> findCharacter(Long id);
 }

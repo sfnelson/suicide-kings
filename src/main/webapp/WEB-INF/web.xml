@@ -31,6 +31,15 @@
 		<filter-name>AuthFilter</filter-name>
 		<url-pattern>/gwtRequest/*</url-pattern>
 	</filter-mapping>
+	
+	<filter>
+		<filter-name>EMFFilter</filter-name>
+		<filter-class>org.sfnelson.sk.server.EMF</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>EMFFilter</filter-name>
+		<url-pattern>/gwtRequest/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

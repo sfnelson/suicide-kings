@@ -7,12 +7,13 @@ import org.sfnelson.sk.client.view.LadderView.LadderPresenter;
 
 public interface LadderView extends View<LadderPresenter> {
 
-    public void setSize(int available);
-    public void setValues(List<CharacterProxy> values);
+	public void setData(List<CharacterProxy> values);
+	public void showData(List<CharacterProxy> values);
 
-    public interface LadderPresenter extends View.ViewPresenter {
-        void registerCharacter(String name);
-        void joinParty(CharacterProxy character);
-        void leaveParty(CharacterProxy character);
-    }
+	public interface LadderPresenter extends View.ViewPresenter {
+		void setShowAll(boolean showAll);
+		void registerCharacter(String name);
+		void joinParty(CharacterProxy character);
+		void leaveParty(CharacterProxy character);
+	}
 }

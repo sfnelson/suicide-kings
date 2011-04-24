@@ -1,12 +1,13 @@
 package org.sfnelson.sk.server;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import org.sfnelson.sk.server.domain.Admin;
 import org.sfnelson.sk.server.domain.Group;
 import org.sfnelson.sk.server.domain.Realm;
 import org.sfnelson.sk.server.request.GroupService;
@@ -17,108 +18,103 @@ import com.google.gwt.requestfactory.shared.Locator;
 
 public class GroupManager extends Locator<Group, Long> implements GroupService {
 
+	private final RealmManager realms = new RealmManager();
+
+	@Override
 	@SuppressWarnings("unchecked")
-	public List<Group> findGroups() {
-		EntityManager em = EMF.get().createEntityManager();
+	public List<Group> findGroups(String region, String server) {
+		Realm realm = realms.findRealm(region, server);
+
+		if (realm == null) return null;
+
+		Query q = EMF.get().createNamedQuery("groupsForRealm");
+		q.setParameter("realm", realm.getId());
+		return q.getResultList();
+	}
+
+	@Override
+	public Group findGroup(String region, String server, String name) {
+		Realm realm = realms.findRealm(region, server);
+
+		if (realm == null) return null;
+
+		return findGroup(realm, name);
+	}
+
+	public Group findGroup(Realm realm, String name) {
 		try {
-			List<Group> groups = em.createNamedQuery("allGroups").getResultList();
-			groups.size();
-			return groups;
+			Query q = EMF.get().createQuery("select from " + Group.class.getName() + " where lname = :name and realmId = :realmId");
+			q.setParameter("name", name.toLowerCase());
+			q.setParameter("realmId", realm.getId());
+			return (Group) q.getSingleResult();
 		}
-		catch (RuntimeException ex) {
-			ex.printStackTrace();
-			throw ex;
-		}
-		finally {
-			em.close();
+		catch (NoResultException ex) {
+			return null;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public Group findGroup(String name, Realm realm) {
-		EntityManager em = EMF.get().createEntityManager();
-		try {
-			Query q = em.createQuery("select from " + Group.class.getName() + " where name = :name");
-			q.setParameter("name", name);
-			// would like to query for realm and server too, but datanucleus has a bug.
-			List<Group> groups = q.getResultList();
-			List<Group> matches = new ArrayList<Group>();
-			for (Group g: groups) {
-				if (g.getRealm().equals(realm)) {
-					matches.add(g);
-				}
-			}
-
-			if (matches.isEmpty()) return null;
-			else return matches.get(0);
-		}
-		catch (RuntimeException ex) {
-			ex.printStackTrace();
-			throw ex;
-		}
-		finally {
-			em.close();
-		}
-	}
-
-	public void createGroup(String name, Realm realm) {
-		if (name == null || realm == null || realm.getRegion() == null || realm.getServer() == null) {
+	@Override
+	public Group createGroup(String region, String server, String name) {
+		if (name == null || region == null || server == null) {
 			throw new RuntimeException("invalid group parameters");
 		}
 
-		Group group = findGroup(name, realm);
+		Realm realm = realms.findRealm(region, server);
 
-		if (group != null) {
+		if (findGroup(realm, name) != null) {
 			throw new RuntimeException("group already exists");
 		}
 
 		User user = UserServiceFactory.getUserService().getCurrentUser();
-		group = new Group();
-		group.setName(name);
-		group.setRealm(realm);
-		group.addOwner(user.getUserId());
-
-		EntityManager em = EMF.get().createEntityManager();
+		EntityManager em = EMF.get();
 		EntityTransaction txn = em.getTransaction();
-		try {
-			txn.begin();
-			em.persist(group);
-			txn.commit();
-		}
-		catch (RuntimeException ex) {
-			ex.printStackTrace();
-			throw ex;
-		}
-		finally {
-			em.close();
-		}
+
+		Group group = new Group();
+		group.setName(name);
+		group.setRealm(realm.getId());
+
+		txn.begin();
+		em.persist(group);
+		txn.commit();
+
+		Admin admin = new Admin();
+		admin.setAccountId(user.getUserId());
+		admin.setGroupId(group.getId());
+
+		txn.begin();
+		em.persist(admin);
+		txn.commit();
+
+		return group;
 	}
 
+	@Override
 	public void deleteGroup(Group group) {
 		User user = UserServiceFactory.getUserService().getCurrentUser();
 
 		System.out.println("delete " + group.getName());
 
-		EntityManager em = EMF.get().createEntityManager();
-		group = em.find(Group.class, group.getId());
+		EntityManager em = EMF.get();
+		EntityTransaction tx = em.getTransaction();
 
-		if (!group.getOwners().contains(user.getUserId())) {
-			throw new RuntimeException("Not allowed to delete this group");
-		}
-
-		EntityTransaction txn = em.getTransaction();
+		Query q = em.createQuery("select p from org.sfnelson.sk.server.domain.Admin p where p.accountId = :account and p.groupId = :group");
+		q.setParameter("account", user.getUserId());
+		q.setParameter("group", group.getId());
+		Admin admin;
 		try {
-			txn.begin();
-			em.remove(group);
-			txn.commit();
+			admin = (Admin) q.getSingleResult();
 		}
-		catch (RuntimeException ex) {
-			ex.printStackTrace();
-			throw ex;
+		catch (NoResultException ex) {
+			throw new RuntimeException("Permission denied: not a group owner");
 		}
-		finally {
-			em.close();
-		}
+
+		tx.begin();
+		q = em.createQuery("delete from org.sfnelson.sk.server.domain.Event where groupId = :group");
+		q.setParameter("group", group.getId());
+		q.executeUpdate();
+		em.remove(group);
+		em.remove(admin);
+		tx.commit();
 	}
 
 	@Override
@@ -132,13 +128,8 @@ public class GroupManager extends Locator<Group, Long> implements GroupService {
 			return null;
 		}
 
-		EntityManager em = EMF.get().createEntityManager();
-		try {
-			return em.find(clazz, id);
-		}
-		finally {
-			em.close();
-		}
+		Group group = EMF.get().find(clazz, id);
+		return group;
 	}
 
 	@Override

@@ -1,19 +1,26 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
 	<ui:style>
-		.important {
-			font-weight: bold;
+		.filter {
+			background-color: #4d1a08;
+			position: relative;
+			overflow: hidden;
+			padding: 1ex 1em;
+		}
+		.reset,.create {
+			float: right;
+		}
+		.input {
+			width: 12em;
 		}
 	</ui:style>
 	<g:FlowPanel>
-		<g:FlowPanel>
-			<g:TextBox ui:field="name" />
-			<g:TextBox ui:field="region" />
-			<g:TextBox ui:field="server" />
-			<g:Button ui:field="create">Create</g:Button>
+		<g:FlowPanel styleName="{style.filter}">
+			<g:TextBox ui:field="filter" styleName="{style.input}" />
+			<g:Button ui:field="reset" styleName="button {style.reset}">Reset</g:Button>
+			<g:Button ui:field="create" styleName="button {style.create}">Create</g:Button>
 		</g:FlowPanel>
-		<c:CellTable ui:field="groups"></c:CellTable>
+		<g:FlowPanel ui:field="list" styleName="list"></g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

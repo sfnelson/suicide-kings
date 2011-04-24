@@ -38,6 +38,6 @@
 			<g:TextBox ui:field="filter" styleName="{style.input}"></g:TextBox>
 			<g:Button ui:field="reset" styleName="button {style.reset}">Reset</g:Button>
 		</g:FlowPanel>
-		<g:FlowPanel ui:field="realms" styleName="list"></g:FlowPanel>
+		<g:FlowPanel ui:field="list" styleName="list"></g:FlowPanel>
 	</g:FlowPanel>
 </ui:UiBinder> 

@@ -14,6 +14,10 @@ header {
 	color: #f5ebd1;
 }
 
+.hide {
+	display: none;
+}
+
 .list {
 	color: #f5ebd1;
 }
@@ -63,6 +67,18 @@ header {
 
 .button:hover {
 	color: white;
+}
+
+.button.disable {
+	color: #aaaaaa;
+	border: solid 1px #5f3f3f;
+	background-color: #5a3b30;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.1, #563a3c), color-stop(0.4, #343039));
+	background-image: -moz-gradient(center top, #563a3c 10%, #343039 40%);
+}
+
+.button.disable:hover {
+	color: #aaaaaa;
 }
 
 input {

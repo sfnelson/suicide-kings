@@ -19,16 +19,16 @@
 			overflow: hidden;
 		}
 		.nav {
-			position: abolute;
-			top: 4ex;
+			position: absolute;
+			top: 6ex;
 			left: 0;
 			right: 0;
 			height: 2ex;
-			padding: 0.5ex 2em;
+			padding: 0.5ex 1em;
 		}
 		.selection, .information {
 			position: absolute;
-			top: 8ex;
+			top: 12ex;
 			bottom: 0;
 			width: 50%;
 		}

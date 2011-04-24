@@ -7,37 +7,47 @@
 			line-height: 1.2em;
 			height: 1.2em;
 		}
-		.realm > * {
+		
+		.realm>* {
 			position: absolute;
 			top: 0.8em;
 			bottom: 0.8em;
 			overflow: hidden;
 		}
+		
 		.server {
 			font-weight: bold;
 			text-align: left;
 			left: 2em;
 			right: 60%;
 		}
+		
 		.type {
 			left: 40%;
 			right: 40%;
 			color: #EBDBA2;
 		}
+		
 		.population {
 			left: 60%;
 			right: 20%;
 			color: #EBDBA2;
 		}
+		
 		.locale {
 			left: 80%;
 			right: 2em;
 		}
-		.rp, .low {
+		
+		.rp,.low {
 			color: #3C3;
 		}
-		.medium, .pve, .rppvp {}
-		.pvp, .high, .full {
+		
+		.medium,.pve,.rppvp {
+			
+		}
+		
+		.pvp,.high,.full {
 			color: #C33;
 		}
 	</ui:style>

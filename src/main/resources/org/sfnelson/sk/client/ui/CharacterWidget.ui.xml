@@ -1,0 +1,14 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.name {
+			display: inline;
+		}
+	</ui:style>
+	<g:FlowPanel styleName="item">
+		<g:Label ui:field="name" styleName="{style.name}"></g:Label>
+		<g:Button ui:field="add" styleName="button add">Add</g:Button>
+		<g:Button ui:field="remove" styleName="button remove">Remove</g:Button>
+	</g:FlowPanel>
+</ui:UiBinder> 

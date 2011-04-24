@@ -30,6 +30,9 @@ public class Realm {
 	private String population;
 	private String locale;
 
+	@SuppressWarnings("unused")
+	private String lserver;
+
 	public Realm() {}
 
 	public Long getId() {
@@ -54,6 +57,7 @@ public class Realm {
 
 	public void setServer(String server) {
 		this.server = server;
+		this.lserver = server.toLowerCase();
 	}
 
 	public String getType() {

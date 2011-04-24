@@ -10,10 +10,13 @@ import com.google.gwt.requestfactory.shared.ProxyFor;
 @ProxyFor(value=Character.class, locator=CharacterManager.class)
 public interface CharacterProxy extends EntityProxy {
 
-    String getName();
-    void setName(String name);
-    Long getSeed();
-    ArmoryProxy getArmory();
+	Long getId();
 
-    EntityProxyId<CharacterProxy> stableId();
+	String getName();
+	void setName(String name);
+	Long getSeed();
+	ArmoryProxy getArmory();
+
+	@Override
+	EntityProxyId<CharacterProxy> stableId();
 }

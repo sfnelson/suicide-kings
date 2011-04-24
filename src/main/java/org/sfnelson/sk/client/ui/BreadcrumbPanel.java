@@ -8,17 +8,18 @@ import org.sfnelson.sk.client.view.NavigationView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class BreadcrumbPanel extends Composite implements NavigationView {
+public class BreadcrumbPanel extends Composite implements NavigationView, ClickHandler {
 
 	private static BreadcrumbPanelUiBinder uiBinder = GWT
 	.create(BreadcrumbPanelUiBinder.class);
@@ -29,6 +30,7 @@ public class BreadcrumbPanel extends Composite implements NavigationView {
 	interface Style extends CssResource {
 		String crumb();
 		String selected();
+		String spacer();
 	}
 
 	private final Map<Anchor, Place> targets = new HashMap<Anchor, Place>();
@@ -57,23 +59,31 @@ public class BreadcrumbPanel extends Composite implements NavigationView {
 			Place target = targets.get(i);
 
 			Anchor a = new Anchor();
+			a.setStyleName(style.crumb());
 			a.setText(text);
-			a.setTarget(target.toString());
+			a.setHref("#" + target.toString());
+			a.addClickHandler(this);
 			this.targets.put(a, target);
+			container.add(a);
 
 			if (i + 1 == texts.size()) {
 				a.addStyleName(style.selected());
 			}
+			else {
+				Label l = new Label(">");
+				l.addStyleName(style.spacer());
+				container.add(l);
+			}
 		}
 	}
 
-	@UiHandler("wrapper")
-	void onClick(ClickEvent ev) {
+	@Override
+	public void onClick(ClickEvent ev) {
 		if (ev.getSource() instanceof Anchor) {
+			ev.preventDefault();
+			ev.stopPropagation();
 			Place target = targets.get(ev.getSource());
 			if (target != null) {
-				ev.preventDefault();
-				ev.stopPropagation();
 				presenter.select(target);
 			}
 		}

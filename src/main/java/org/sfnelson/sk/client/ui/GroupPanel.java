@@ -5,24 +5,17 @@ import java.util.List;
 import org.sfnelson.sk.client.request.GroupProxy;
 import org.sfnelson.sk.client.view.GroupView;
 
-import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 
-public class GroupPanel extends Composite implements GroupView {
+public class GroupPanel extends ListPanel<GroupProxy, GroupListEntry> implements GroupView {
 
 	private static GroupPanelUiBinder uiBinder = GWT.create(GroupPanelUiBinder.class);
 
@@ -30,79 +23,71 @@ public class GroupPanel extends Composite implements GroupView {
 	}
 
 	public GroupPanel() {
+		super(new ListEntry.EntryFactory<GroupProxy, GroupListEntry>() {
+			@Override
+			public GroupListEntry createEntry() {
+				return new GroupListEntry();
+			}
+		});
+
 		initWidget(uiBinder.createAndBindUi(this));
+		create.addStyleName("disable");
 	}
 
-	@UiField CellTable<GroupProxy> groups;
-
-	@UiField TextBox name;
-	@UiField TextBox region;
-	@UiField TextBox server;
-
+	@UiField TextBox filter;
 	@UiField Button create;
+	@UiField Button reset;
+
+	private boolean unique = false;
 
 	private Presenter presenter;
 
 	@Override
 	public void setPresenter(Presenter presenter) {
 		this.presenter = presenter;
+
+		presenter.filter(filter.getValue());
 	}
 
 	@Override
-	public void setGroups(List<GroupProxy> groups) {
-		this.groups.setRowData(groups);
+	public void showData(List<GroupProxy> data) {
+		super.showData(data);
+
+		if (data.isEmpty() && filter.getValue().length() >= 5) {
+			create.removeStyleName("disable");
+			unique = true;
+		}
+		else {
+			create.addStyleName("disable");
+			unique = false;
+		}
 	}
 
 	@UiHandler("create")
 	void onCreate(ClickEvent e) {
-		presenter.createGroup(name.getValue(), region.getValue(), server.getValue());
+		if (unique) {
+			presenter.createGroup(filter.getValue());
+		}
 	}
 
-	@UiFactory
-	CellTable<GroupProxy> createGroupTable() {
-		CellTable<GroupProxy> table = new CellTable<GroupProxy>();
+	@UiHandler("filter")
+	void onChange(KeyUpEvent ev) {
+		presenter.filter(filter.getValue());
+	}
 
-		table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
-			@Override
-			public String getValue(GroupProxy group) {
-				return group.getName();
-			}
-		});
+	@UiHandler("reset")
+	void reset(ClickEvent ev) {
+		filter.setValue("");
+		presenter.filter("");
+	}
 
-		table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
-			@Override
-			public String getValue(GroupProxy group) {
-				if (group == null || group.getRealm() == null) {
-					return "null";
-				}
-				else {
-					return group.getRealm().getRegion();
-				}
-			}
-		});
-
-		table.addColumn(new Column<GroupProxy, String>(new TextCell()) {
-			@Override
-			public String getValue(GroupProxy group) {
-				if (group == null || group.getRealm() == null) {
-					return "null";
-				}
-				else {
-					return group.getRealm().getServer();
-				}
-			}
-		});
-
-		table.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-		final SingleSelectionModel<GroupProxy> selectionModel = new SingleSelectionModel<GroupProxy>();
-		table.setSelectionModel(selectionModel);
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				presenter.select(selectionModel.getSelectedObject());
-			}
-		});
-
-		return table;
+	@Override
+	public void onClick(ClickEvent event) {
+		if (event.getSource() instanceof GroupListEntry) {
+			GroupListEntry e = (GroupListEntry) event.getSource();
+			event.preventDefault();
+			event.stopPropagation();
+			presenter.select(e.getData());
+		}
 	}
 }

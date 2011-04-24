@@ -1,12 +1,6 @@
 package org.sfnelson.sk.server.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Basic;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,8 +10,7 @@ import javax.persistence.Version;
 
 @Entity(name="groups")
 @NamedQueries({
-	@NamedQuery(name="allGroups", query="select g from org.sfnelson.sk.server.domain.Group g"),
-	@NamedQuery(name="countGroups", query="select count(g) from org.sfnelson.sk.server.domain.Group g")
+	@NamedQuery(name="groupsForRealm", query="select g from org.sfnelson.sk.server.domain.Group g where realmId = :realm"),
 })
 public class Group {
 
@@ -28,27 +21,14 @@ public class Group {
 	@Version
 	private Integer version;
 
-	@Basic(fetch=FetchType.EAGER)
-	@Embedded
-	private Realm realm;
+	private Long realmId;
 
 	private String name;
 
-	@Basic(fetch=FetchType.EAGER)
-	private final Set<String> owners;
+	@SuppressWarnings("unused")
+	private String lname;
 
-	private final Set<Long> characterIds;
-
-	public Group() {
-		this.characterIds = new HashSet<Long>();
-		this.owners = new HashSet<String>();
-	}
-
-	public Group(Realm realm, String name) {
-		this();
-		this.realm = realm;
-		this.name = name;
-	}
+	public Group() {}
 
 	public Long getId() {
 		return id;
@@ -58,12 +38,12 @@ public class Group {
 		return version;
 	}
 
-	public Realm getRealm() {
-		return realm;
+	public Long getRealmId() {
+		return realmId;
 	}
 
-	public void setRealm(Realm realm) {
-		this.realm = realm;
+	public void setRealm(Long realmId) {
+		this.realmId = realmId;
 	}
 
 	public String getName() {
@@ -72,30 +52,6 @@ public class Group {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Set<Long> getCharacterIds() {
-		return characterIds;
-	}
-
-	public void addCharacter(Long characterId) {
-		this.characterIds.add(characterId);
-	}
-
-	public Set<String> getOwners() {
-		return owners;
-	}
-
-	public void addOwner(String owner) {
-		this.owners.add(owner);
-	}
-
-	public void removeOwner(String owner) {
-		this.owners.remove(owner);
-	}
-
-	@Override
-	public String toString() {
-		return id + ": " + name + " (" + realm + ")";
+		this.lname = name.toLowerCase();
 	}
 }

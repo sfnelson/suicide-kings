@@ -63,6 +63,7 @@ public class GroupDetailsPanel extends Composite implements GroupDetailsView {
 
 		name.setText(group.getName());
 
+		/*
 		if (group.getRealm() == null) {
 			region.setText("null");
 			server.setText("null");
@@ -70,7 +71,7 @@ public class GroupDetailsPanel extends Composite implements GroupDetailsView {
 		else {
 			region.setText(group.getRealm().getRegion());
 			server.setText(group.getRealm().getServer());
-		}
+		}*/ // TODO
 
 		if (isOwner) {
 			panel.addStyleName(style.owner());

@@ -11,6 +11,6 @@ public interface EventService {
 
 	void joinParty(Group group, Character character);
 	void leaveParty(Group group, Character character);
-	List<Event> getEvents(Date lastUpdate);
+	List<Event> getEvents(Group group, Date lastUpdate);
 
 }

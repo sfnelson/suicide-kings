@@ -3,6 +3,9 @@ package org.sfnelson.sk.client.ui;
 import org.sfnelson.sk.client.request.RealmProxy;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -10,7 +13,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class RealmListEntry extends Composite {
+public class RealmListEntry extends Composite implements ListEntry<RealmProxy> {
 
 	private static RealmListEntryUiBinder uiBinder = GWT
 	.create(RealmListEntryUiBinder.class);
@@ -35,11 +38,16 @@ public class RealmListEntry extends Composite {
 	@UiField Label population;
 	@UiField Label locale;
 
+	private RealmProxy realm;
+
 	public RealmListEntry() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-	public void setRealm(RealmProxy realm) {
+	@Override
+	public void setData(RealmProxy realm) {
+		this.realm = realm;
+
 		server.setText(realm.getServer());
 
 		String type = realm.getType();
@@ -88,6 +96,7 @@ public class RealmListEntry extends Composite {
 		}
 	}
 
+	@Override
 	public void clear() {
 		server.setText("");
 
@@ -104,6 +113,16 @@ public class RealmListEntry extends Composite {
 		population.removeStyleName(style.full());
 
 		locale.setText("");
+	}
+
+	@Override
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return addDomHandler(handler, ClickEvent.getType());
+	}
+
+	@Override
+	public RealmProxy getData() {
+		return realm;
 	}
 
 }

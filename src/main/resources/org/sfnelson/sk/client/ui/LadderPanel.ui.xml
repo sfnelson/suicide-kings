@@ -53,15 +53,15 @@
 		<g:FlowPanel styleName="container">
 			<g:FlowPanel styleName="{style.header}">
 				<g:FlowPanel styleName="{style.view}">
-					<g:Button ui:field="edit" styleName="{style.mode}">Edit</g:Button>
+					<g:Button ui:field="edit" styleName="button {style.mode}">Edit</g:Button>
 				</g:FlowPanel>
 				<g:FlowPanel styleName="{style.edit}">
 					<g:TextBox ui:field="name" />
-					<g:Button ui:field="add">Add Character</g:Button>
-					<g:Button ui:field="done" styleName="{style.mode}">Done</g:Button>
+					<g:Button ui:field="add" styleName="button">Add Character</g:Button>
+					<g:Button ui:field="done" styleName="button {style.mode}">Done</g:Button>
 				</g:FlowPanel>
 			</g:FlowPanel>
-			<c:CellList ui:field="container" styleName="{style.contents}"/>
+			<g:FlowPanel ui:field="list" styleName="list" />
 			<g:FlowPanel styleName="{style.footer}">
 			</g:FlowPanel>
 		</g:FlowPanel>

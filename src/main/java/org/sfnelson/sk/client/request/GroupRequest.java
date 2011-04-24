@@ -11,9 +11,8 @@ import com.google.gwt.requestfactory.shared.Service;
 
 @Service(value=GroupService.class, locator=ServiceLocator.class)
 public interface GroupRequest extends RequestContext {
-
-	Request<List<GroupProxy>> findGroups();
-	Request<Void> createGroup(String name, String realm, String server);
+	Request<List<GroupProxy>> findGroups(String region, String server);
+	Request<GroupProxy> createGroup(String region, String server, String name);
+	Request<GroupProxy> findGroup(String region, String server, String name);
 	Request<Void> deleteGroup(GroupProxy group);
-
 }

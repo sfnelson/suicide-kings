@@ -1,16 +1,14 @@
 package org.sfnelson.sk.client;
 
-import org.sfnelson.sk.client.activity.Authenticate;
 import org.sfnelson.sk.client.activity.SelectGroup;
 import org.sfnelson.sk.client.activity.SelectRealm;
 import org.sfnelson.sk.client.activity.ShowLadder;
-import org.sfnelson.sk.client.place.Login;
-import org.sfnelson.sk.client.place.ShowGroup;
-import org.sfnelson.sk.client.request.GroupProxy;
+import org.sfnelson.sk.client.place.Group;
+import org.sfnelson.sk.client.place.Realm;
+import org.sfnelson.sk.client.place.Region;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
 
 public class SelectionActivityMapper implements com.google.gwt.activity.shared.ActivityMapper {
 
@@ -22,21 +20,14 @@ public class SelectionActivityMapper implements com.google.gwt.activity.shared.A
 
 	@Override
 	public Activity getActivity(Place place) {
-		if (place instanceof Login) {
-			return new Authenticate(factory);
+		if (place instanceof Region) {
+			return new SelectRealm(factory, (Region) place);
 		}
-		if (place instanceof org.sfnelson.sk.client.place.SelectGroup) {
-			return new SelectGroup(factory);
+		if (place instanceof Realm) {
+			return new SelectGroup(factory, (Realm) place);
 		}
-		if (place instanceof org.sfnelson.sk.client.place.SelectRealm) {
-			String region = ((org.sfnelson.sk.client.place.SelectRealm) place).getRegion();
-			return new SelectRealm(factory, region);
-		}
-		if (place instanceof ShowGroup) {
-			ShowGroup p = (ShowGroup) place;
-			EntityProxyId<GroupProxy> groupId = ShowGroup.id(factory.getRequestFactory(), p);
-
-			return new ShowLadder(factory, groupId);
+		if (place instanceof Group) {
+			return new ShowLadder(factory, (Group) place);
 		}
 
 		return null;

@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.group {
+			text-align: center;
+			line-height: 1.2em;
+			height: 1.2em;
+		}
+		.group > * {
+			position: absolute;
+			top: 0.8em;
+			bottom: 0.8em;
+			overflow: hidden;
+		}
+		.name {
+			font-weight: bold;
+			text-align: left;
+			left: 2em;
+			right: 60%;
+		}
+	</ui:style>
+	<g:FlowPanel styleName="item {style.group}">
+		<g:Label ui:field="name" styleName="{style.name}"></g:Label>
+	</g:FlowPanel>
+</ui:UiBinder> 
