@@ -13,6 +13,7 @@ public interface EventsView extends IsWidget {
 
 	public interface Presenter {
 
+		void assign(String character, String loot);
 		void requestSuggestion(Request request, Callback callback);
 
 	}

@@ -9,6 +9,7 @@ import org.sfnelson.sk.server.domain.Group;
 
 public interface EventService {
 
+	void assign(String region, String server, String group, Long characterId, Long lootId);
 	void joinParty(Group group, Character character);
 	void leaveParty(Group group, Character character);
 	List<Event> getEvents(Group group, Date lastUpdate);

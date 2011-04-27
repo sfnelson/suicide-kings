@@ -1,5 +1,6 @@
 package org.sfnelson.sk.client;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import org.sfnelson.sk.client.request.EventProxy;
 import org.sfnelson.sk.client.request.GroupProxy;
 import org.sfnelson.sk.client.request.LootProxy;
 import org.sfnelson.sk.client.request.RequestFactory;
+import org.sfnelson.sk.shared.EventType;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -27,29 +29,25 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class EventManager extends AbstractActivity {
 
 	private final RequestFactory rf;
-	private final Timer updater = new Timer() {
-		@Override
-		public void run() {
-			rf.eventRequest().getEvents(group, lastUpdate).fire(new EventReciever());
-		}
-	};
+	private final Updater updater;
+	private final Group group;
+
+	private final Queue<EventProxy> pending;
+	private final Map<Long, Character> characters;
+	private final Map<Long, LootProxy> loot;
 
 	private EventBus eventBus;
-	private GroupProxy group;
+	private GroupProxy groupProxy;
 
 	private Date lastUpdate;
-	private final Queue<EventProxy> pending = new PriorityQueue<EventProxy>(128, new Comparator<EventProxy>() {
-		@Override
-		public int compare(EventProxy e1, EventProxy e2) {
-			return e1.getDate().compareTo(e2.getDate());
-		}
-	});
-
-	private final Map<Long, CharacterProxy> characters = new HashMap<Long, CharacterProxy>();
-	private final Map<Long, LootProxy> loot = new HashMap<Long, LootProxy>();
 
 	public EventManager(final RequestFactory rf, final PlaceController pc, final Group group) {
 		this.rf = rf;
+		this.updater = new Updater();
+		this.pending = new PriorityQueue<EventProxy>(128, new EventComparator());
+		this.characters = new HashMap<Long, Character>();
+		this.loot = new HashMap<Long, LootProxy>();
+		this.group = group;
 
 		final Realm realm = group.getRealm();
 		rf.groupRequest().findGroup(realm.getRegion().getRegion(), realm.getServer(), group.getName())
@@ -66,13 +64,28 @@ public class EventManager extends AbstractActivity {
 		});
 	}
 
-	private void init(GroupProxy group) {
-		this.group = group;
+	private void init(final GroupProxy groupProxy) {
+		Realm realm = group.getRealm();
 
-		if (eventBus != null) {
-			updater.scheduleRepeating(5000);
-			updater.run();
-		}
+		this.groupProxy = groupProxy;
+
+		rf.characterRequest().findCharactersForGroup(realm.getRegion().getRegion(), realm.getServer(), group.getName())
+		.with("armory")
+		.fire(new Receiver<List<CharacterProxy>>() {
+			@Override
+			public void onSuccess(List<CharacterProxy> response) {
+				for (CharacterProxy character: response) {
+					if (!characters.containsKey(character.getId())) {
+						Character c = new Character(rf, character, groupProxy, group);
+						characters.put(character.getId(), c);
+					}
+				}
+
+				if (eventBus != null) {
+					updater.run();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -80,8 +93,7 @@ public class EventManager extends AbstractActivity {
 		this.eventBus = eventBus;
 		lastUpdate = new Date(0);
 
-		if (group != null) {
-			updater.scheduleRepeating(5000);
+		if (groupProxy != null) {
 			updater.run();
 		}
 	}
@@ -92,17 +104,12 @@ public class EventManager extends AbstractActivity {
 		pending.clear();
 	}
 
-	public GroupProxy getGroup() {
-		return group;
-	}
-
 	private void process() {
 		while (!pending.isEmpty()) {
 			EventProxy event = pending.peek();
 
-			CharacterProxy character = characters.get(event.getCharacterId());
+			Character character = characters.get(event.getCharacterId());
 			if (character == null) {
-				System.out.println("get character");
 				getCharacter(event.getCharacterId());
 				break;
 			}
@@ -111,14 +118,21 @@ public class EventManager extends AbstractActivity {
 			if (event.getLootId() != null) {
 				loot = this.loot.get(event.getLootId());
 				if (loot == null) {
-					System.out.println("get loot");
-					getLoot(event.getLootId());
+					List<Long> requiredLoots = new ArrayList<Long>();
+					for (EventProxy e: pending) {
+						if (e.getType() == EventType.LOOT
+								&& !this.loot.containsKey(e.getLootId()))
+						{
+							requiredLoots.add(e.getLootId());
+						}
+					}
+					getLoot(requiredLoots);
 					break;
 				}
 			}
 
 			pending.poll();
-			SuicideKingsEvent.fire(eventBus, event, group, character, loot);
+			SuicideKingsEvent.fire(eventBus, event, groupProxy, character, loot);
 		}
 	}
 
@@ -128,17 +142,22 @@ public class EventManager extends AbstractActivity {
 		.fire(new Receiver<CharacterProxy>() {
 			@Override
 			public void onSuccess(CharacterProxy character) {
-				characters.put(character.getId(), character);
+				if (!characters.containsKey(character.getId())) {
+					Character c = new Character(rf, character, groupProxy, group);
+					characters.put(character.getId(), c);
+				}
 				process();
 			}
 		});
 	}
 
-	private void getLoot(Long id) {
-		rf.lootRequest().findLoot(id).fire(new Receiver<LootProxy>() {
+	private void getLoot(List<Long> requiredLoots) {
+		rf.lootRequest().findLootsById(requiredLoots).fire(new Receiver<List<LootProxy>>() {
 			@Override
-			public void onSuccess(LootProxy loot) {
-				EventManager.this.loot.put(loot.getId(), loot);
+			public void onSuccess(List<LootProxy> response) {
+				for (LootProxy loot: response) {
+					EventManager.this.loot.put(loot.getId(), loot);
+				}
 				process();
 			}
 		});
@@ -147,6 +166,8 @@ public class EventManager extends AbstractActivity {
 	private class EventReciever extends Receiver<List<EventProxy>> {
 		@Override
 		public void onSuccess(List<EventProxy> response) {
+			updater.updated(!response.isEmpty());
+
 			for (EventProxy event: response) {
 				if (event.getDate().after(lastUpdate)) {
 					lastUpdate = event.getDate();
@@ -155,6 +176,37 @@ public class EventManager extends AbstractActivity {
 			}
 
 			process();
+			updater.schedule();
+		}
+	}
+
+	private class Updater extends Timer {
+		private static final int DEFAULT_DELAY = 1000;
+		private int delay = DEFAULT_DELAY;
+
+		@Override
+		public void run() {
+			rf.eventRequest().getEvents(groupProxy, lastUpdate).fire(new EventReciever());
+		}
+
+		public void updated(boolean updated) {
+			if (updated) {
+				delay = DEFAULT_DELAY;
+			}
+			else {
+				delay = delay * 2;
+			}
+		}
+
+		public void schedule() {
+			this.schedule(delay);
+		}
+	}
+
+	private class EventComparator implements Comparator<EventProxy> {
+		@Override
+		public int compare(EventProxy e1, EventProxy e2) {
+			return e1.getDate().compareTo(e2.getDate());
 		}
 	}
 }

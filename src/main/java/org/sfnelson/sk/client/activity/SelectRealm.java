@@ -1,7 +1,9 @@
 package org.sfnelson.sk.client.activity;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.sfnelson.sk.client.Factory;
 import org.sfnelson.sk.client.place.Realm;
@@ -102,7 +104,7 @@ public class SelectRealm extends AbstractActivity implements RealmView.Presenter
 			@Override
 			public void execute() {
 				if (!SelectRealm.this.filter.equals(filter)) return;
-				List<RealmProxy> filtered = index.filter(filter);
+				Set<RealmProxy> filtered = new HashSet<RealmProxy>(index.filter(filter));
 				if (!SelectRealm.this.filter.equals(filter)) return;
 				view.showData(filtered);
 			}

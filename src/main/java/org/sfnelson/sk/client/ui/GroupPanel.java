@@ -1,6 +1,6 @@
 package org.sfnelson.sk.client.ui;
 
-import java.util.List;
+import java.util.Set;
 
 import org.sfnelson.sk.client.request.GroupProxy;
 import org.sfnelson.sk.client.view.GroupView;
@@ -50,7 +50,7 @@ public class GroupPanel extends ListPanel<GroupProxy, GroupListEntry> implements
 	}
 
 	@Override
-	public void showData(List<GroupProxy> data) {
+	public void showData(Set<GroupProxy> data) {
 		super.showData(data);
 
 		if (data.isEmpty() && filter.getValue().length() >= 5) {

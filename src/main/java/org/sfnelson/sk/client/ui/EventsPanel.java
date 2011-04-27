@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
@@ -93,14 +93,19 @@ public class EventsPanel extends Composite implements EventsView {
 		}
 	}
 
-	private class EventWidget extends Label {
+	@UiHandler("submit")
+	void assign(ClickEvent ev) {
+		presenter.assign(name.getValue(), lootId.getValue());
+	}
+
+	private class EventWidget extends HTML {
 		private final DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 
 		public EventWidget(SuicideKingsEvent event) {
 			setStyleName("item");
 
-			String date = format.format(event.getEvent().getDate());
-			String name = event.getCharacter().getName();
+			String date = "<span class='date'>" + format.format(event.getEvent().getDate()) + "</span>";
+			String name = event.getCharacter().getHref();
 			String type = "";
 			String loot = "";
 
@@ -120,11 +125,13 @@ public class EventsPanel extends Composite implements EventsView {
 			case LOOT:
 				type = " received loot ";
 				loot = event.getLoot().getName() + " (" + event.getLoot().getReference() + ")";
+				loot = "<a href='http://www.wowhead.com/?item=" + event.getLoot().getReference() + "'>"
+				+ event.getLoot().getName() + "</a>";
 				addStyleName(style.loot());
 				break;
 			}
 
-			setText(date + ": " + name + type + loot);
+			setHTML(date + " " + name + type + loot);
 		}
 	}
 }

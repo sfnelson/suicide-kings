@@ -3,17 +3,40 @@ package org.sfnelson.sk.server;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.sfnelson.sk.server.domain.Character;
 import org.sfnelson.sk.server.domain.Event;
 import org.sfnelson.sk.server.domain.Group;
+import org.sfnelson.sk.server.domain.Loot;
 import org.sfnelson.sk.server.request.EventService;
 import org.sfnelson.sk.shared.EventType;
 
 import com.google.gwt.requestfactory.shared.Locator;
 
 public class EventManager extends Locator<Event, Long> implements EventService {
+
+	private final GroupManager groups = new GroupManager();
+	private final CharacterManager characters = new CharacterManager();
+	private final LootManager loots = new LootManager();
+
+	@Override
+	public void assign(String region, String server, String groupName,
+			Long characterId, Long reference) {
+		Group group = groups.findGroup(region, server, groupName);
+		Character character = characters.findCharacter(characterId);
+		Loot loot = loots.findLootByReference(reference);
+
+		EntityManager em = EMF.get();
+		EntityTransaction tx = em.getTransaction();
+
+		Event event = new Event(EventType.LOOT, group, character, loot, "suicide");
+		tx.begin();
+		em.persist(event);
+		tx.commit();
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")

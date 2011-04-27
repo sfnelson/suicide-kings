@@ -9,17 +9,18 @@ import javax.persistence.Version;
 @Entity
 public class Loot {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
-    @Version
-    private Integer version;
+	@Version
+	private Integer version;
 
-    private Long reference;
-    private String name;
+	private Long reference;
 
-    public Loot() {}
+	private String name;
+
+	public Loot() {}
 
 	public Loot(Long reference, String name) {
 		this.reference = reference;
@@ -31,27 +32,27 @@ public class Loot {
 	}
 
 	public Integer getVersion() {
-	    return version;
+		return version;
 	}
 
 	public Long getReference() {
-	    return reference;
+		return reference;
 	}
 
 	public void setReference(Long reference) {
-	    this.reference = reference;
+		this.reference = reference;
 	}
 
 	public String getName() {
-	    return name;
+		return name;
 	}
 
-	public String setName() {
-	    return name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "item[" + getReference() + "]";
+		return name + " (" + getReference() + ")";
 	}
 }

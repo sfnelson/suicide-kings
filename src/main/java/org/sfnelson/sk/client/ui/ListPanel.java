@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.CssResource;
@@ -52,22 +53,23 @@ public abstract class ListPanel<T, E extends ListEntry<T>> extends Composite imp
 		}
 	}
 
-	public void showData(List<T> data) {
-		for (T d: this.data) {
-			rows.get(d).addStyleName("hide");
-		}
-
+	public void showData(Set<T> data) {
 		int i = 0;
-		for (T d: data) {
+		for (T d: this.data) {
 			E e = rows.get(d);
-			e.removeStyleName("hide");
-			if (i++ % 2 == 1) {
-				e.removeStyleName("even");
-				e.addStyleName("odd");
+			if (data.contains(d)) {
+				e.removeStyleName("hide");
+				if (i++ % 2 == 1) {
+					e.removeStyleName("even");
+					e.addStyleName("odd");
+				}
+				else {
+					e.removeStyleName("odd");
+					e.addStyleName("even");
+				}
 			}
 			else {
-				e.removeStyleName("odd");
-				e.addStyleName("even");
+				e.addStyleName("hide");
 			}
 		}
 	}

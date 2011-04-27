@@ -611,7 +611,7 @@
 					<style>PRETTY</style>
 					<runTarget>/SuicideKings.html</runTarget>
 					<modules>
-						<module>${project.groupId}.SuicideKings</module>
+						<module>${project.groupId}.${project.artifactId}.SuicideKings</module>
 					</modules>
 					<server>com.google.appengine.tools.development.gwt.AppEngineLauncher</server>
 					<appEngineVersion>${gae.version}</appEngineVersion>

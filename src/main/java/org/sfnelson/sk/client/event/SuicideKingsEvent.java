@@ -1,7 +1,7 @@
 package org.sfnelson.sk.client.event;
 
+import org.sfnelson.sk.client.Character;
 import org.sfnelson.sk.client.event.SuicideKingsEvent.EventHandler;
-import org.sfnelson.sk.client.request.CharacterProxy;
 import org.sfnelson.sk.client.request.EventProxy;
 import org.sfnelson.sk.client.request.GroupProxy;
 import org.sfnelson.sk.client.request.LootProxy;
@@ -13,7 +13,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 
 public class SuicideKingsEvent extends GwtEvent<EventHandler> {
 
-	public static void fire(EventBus bus, EventProxy event, GroupProxy group, CharacterProxy character, LootProxy loot) {
+	public static void fire(EventBus bus, EventProxy event, GroupProxy group, Character character, LootProxy loot) {
 		bus.fireEvent(new SuicideKingsEvent(event, group, character, loot));
 	}
 
@@ -32,10 +32,10 @@ public class SuicideKingsEvent extends GwtEvent<EventHandler> {
 
 	private final EventProxy event;
 	private final GroupProxy group;
-	private final CharacterProxy character;
+	private final Character character;
 	private final LootProxy loot;
 
-	private SuicideKingsEvent(EventProxy event, GroupProxy group, CharacterProxy character, LootProxy loot) {
+	private SuicideKingsEvent(EventProxy event, GroupProxy group, Character character, LootProxy loot) {
 		this.event = event;
 		this.group = group;
 		this.character = character;
@@ -54,7 +54,7 @@ public class SuicideKingsEvent extends GwtEvent<EventHandler> {
 		return group;
 	}
 
-	public CharacterProxy getCharacter() {
+	public Character getCharacter() {
 		return character;
 	}
 

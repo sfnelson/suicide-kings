@@ -1,7 +1,9 @@
 package org.sfnelson.sk.client.activity;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.sfnelson.sk.client.Factory;
 import org.sfnelson.sk.client.place.Group;
@@ -111,7 +113,7 @@ public class SelectGroup extends AbstractActivity implements GroupView.Presenter
 			@Override
 			public void execute() {
 				if (!SelectGroup.this.filter.equals(filter)) return;
-				List<GroupProxy> filtered = index.filter(filter);
+				Set<GroupProxy> filtered = new HashSet<GroupProxy>(index.filter(filter));
 				if (!SelectGroup.this.filter.equals(filter)) return;
 				view.showData(filtered);
 			}

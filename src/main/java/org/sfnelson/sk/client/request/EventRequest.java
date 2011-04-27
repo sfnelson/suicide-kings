@@ -13,6 +13,7 @@ import com.google.gwt.requestfactory.shared.Service;
 @Service(value=EventService.class, locator=ServiceLocator.class)
 public interface EventRequest extends RequestContext {
 
+	Request<Void> assign(String region, String server, String group, Long characterId, Long lootId);
 	Request<Void> joinParty(GroupProxy group, CharacterProxy character);
 	Request<Void> leaveParty(GroupProxy group, CharacterProxy character);
 	Request<List<EventProxy>> getEvents(GroupProxy group, Date lastUpdate);

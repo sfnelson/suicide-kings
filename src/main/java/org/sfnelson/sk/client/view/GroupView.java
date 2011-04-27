@@ -1,6 +1,7 @@
 package org.sfnelson.sk.client.view;
 
 import java.util.List;
+import java.util.Set;
 
 import org.sfnelson.sk.client.request.GroupProxy;
 
@@ -10,7 +11,7 @@ public interface GroupView extends IsWidget {
 
 	void setPresenter(Presenter presenter);
 	void setData(List<GroupProxy> data);
-	void showData(List<GroupProxy> data);
+	void showData(Set<GroupProxy> data);
 
 	interface Presenter {
 
